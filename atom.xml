@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>X</title>
+  
+  <subtitle>x</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2018-12-30T08:21:35.231Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>X</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>First post</title>
+    <link href="http://yoursite.com/2018/12/30/123/"/>
+    <id>http://yoursite.com/2018/12/30/123/</id>
+    <published>2018-12-30T05:32:01.000Z</published>
+    <updated>2018-12-30T08:21:35.231Z</updated>
+    
+    <content type="html"><![CDATA[<p> I konw it seems like the world is crumbling out there,but it is actually a great time in your life to get a little crazy.Follow your curiosity,and be ambitious about it.Don’t give up your dreams. The world needs you all!</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt; I konw it seems like the world is crumbling out there,but it is actually a great time in your life to get a little crazy.Follow your cur
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>
