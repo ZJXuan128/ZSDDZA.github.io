@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-12-30T08:21:35.231Z</updated>
+  <updated>2019-01-02T14:19:24.615Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,9 +17,33 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title></title>
+    <link href="http://yoursite.com/2019/01/02/%E5%8D%9A%E5%AE%A2%E5%88%9B%E5%BB%BA%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%91%98%E8%A6%81/"/>
+    <id>http://yoursite.com/2019/01/02/博客创建问题及解决摘要/</id>
+    <published>2019-01-02T10:52:28.801Z</published>
+    <updated>2019-01-02T14:19:24.615Z</updated>
+    
+    <content type="html"><![CDATA[<hr><p>title: 博客创建问题及解决摘要</p><p>date: 2019-01-02 18:52:28</p><p>tags:<br>以下为本博客创建时所遇到的一些疑难问题与所关注过的注意事项，对其有详细解答。中途还会介绍涉及到的部分零碎知识。如有描述不准，望海涵斧正。<br><a href="https://www.cnblogs.com/fengxiongZz/p/7707219.html" target="_blank" rel="noopener">(参考的安装教程)</a>—</p><h1 id="一、Node-js-amp-Github环境搭建"><a href="#一、Node-js-amp-Github环境搭建" class="headerlink" title="一、Node.js &amp; Github环境搭建"></a>一、Node.js &amp; Github环境搭建</h1><h5 id="①、下载安装时避免将两个环境置入同一个文件夹"><a href="#①、下载安装时避免将两个环境置入同一个文件夹" class="headerlink" title="①、下载安装时避免将两个环境置入同一个文件夹"></a>①、下载安装时避免将两个环境置入同一个文件夹</h5><h5 id="②、创建Github项目时以“账户名-github-io”为格式"><a href="#②、创建Github项目时以“账户名-github-io”为格式" class="headerlink" title="②、创建Github项目时以“账户名.github.io”为格式"></a>②、创建Github项目时以“账户名.github.io”为格式</h5><h2 id="—————进入正题—————"><a href="#—————进入正题—————" class="headerlink" title="—————进入正题—————"></a>—————<em>进入正题</em>—————</h2><p><del>这里出现问题比较多，需要重点关注</del></p><h1 id="二、安装hexo"><a href="#二、安装hexo" class="headerlink" title="二、安装hexo"></a>二、<strong>安装hexo</strong></h1><h3 id="1、使用nmp安装Github"><a href="#1、使用nmp安装Github" class="headerlink" title="1、使用nmp安装Github"></a>1、使用nmp安装Github</h3><p><strong><em>问题Ⅰ：</em></strong>首次用nmp安装Github时，一段进度条会一直无法“前进”，安装进度停滞不前。<br><strong>剖析：</strong>首先，简单介绍一下npm。</p><blockquote><p>npm是随同NodeJS一起安装的包(package)管理工具，能解决NodeJS代码部署上的很多问题。<br>它由三个独立的部分组成：</p><ul><li>网站</li><li>注册表(registry)</li><li>命令行工具(CLI)<br>由于众所周知的原因，国内访问外国网站时一直不怎么流畅，就此问题而言，比起搭梯子，一个淘宝镜像来的更方便快捷。:D<br>那么接下来就是讲一下镜像了。<br>镜像是冗余的一种类型，一个磁盘上的数据在另一个磁盘上存在一个完全相同的副本即为镜像。<br>根据这个描述，可以知道这个淘宝NPM镜像（可以从网络轻松获得，复制停滞进度条前的代码百度即可）是用来替代官方版本的完整镜像，可以完美解决此问题。<br>附上镜像：<code>npm config set registry https://registry.npm.taobao.org</code>  （退出原有的控制台，再次进入安装hexo的文件夹中，直接在命令行中输入即可）</li></ul></blockquote><h3 id="2、关联hexo和Github-page"><a href="#2、关联hexo和Github-page" class="headerlink" title="2、关联hexo和Github page"></a>2、关联hexo和Github page</h3><p><strong><em>问题Ⅱ：</em></strong><font color="#9932CC"> .ssh </font>文件夹及涉及问题<br><strong>具体描述及解决措施：</strong></p><ul><li>①描述：在Git Bash的命令框中输入<code>cd ~/.ssh</code>时，反馈没有此文件夹。<br>解决方案：正常现象，可以继续教程的下一步，系统会自动创建.ssh文件夹。<br>即输入<code>ssh-keygen -t rsa -C “your email address”</code> <font color="#DC143C">(所有指令中注意空格不可略、不可多)</font><br>然后就没什么多说的了，回车就完事了。这时<font color="#9932CC"> .ssh </font>文件夹中会出现两个文件，一个是公钥一个是私钥。这就牵扯到密码学的RSA加密算法<del>在前面输入指令中出现过</del>。简单来说公钥是可公开信息，而私钥是你自己保管。通过一系列算法保证信息安全性。因为对极大整数做因数分解的难度决定了RSA算法的可靠性（不是简单入门的素数判断哦）穷举可破解，但时间得不偿失😊。</li><li>②描述：在hexo文件夹中，找到_config.yml文件并修改时需要注意的事项。<br>  第一这类文件对格式要求即为严格，<font color="#DC143C"> 每个冒号后必须要使用一个空格 </font>，对它的修改在后来配置自己博客时经常出现，所以需要牢记。不然本地检测会报错。<br><img src="D:\WEBLOG\HEXO\source\images\error.jpg" alt="错误实例" title="从朋友那爬了一张图"><br>  第二修改时会有一项<code>repository:</code>     注意使用的是github上项目的SSH不是HTTP！不是HTTP！<del>没有第三遍</del></li></ul><p>至此基本总结结束，后续也许会修改<br>                                                                      最后修改于19/1/2        21：45                                     于大数据实验室</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;hr&gt;
+&lt;p&gt;title: 博客创建问题及解决摘要&lt;/p&gt;
+&lt;p&gt;date: 2019-01-02 18:52:28&lt;/p&gt;
+&lt;p&gt;tags:&lt;br&gt;以下为本博客创建时所遇到的一些疑难问题与所关注过的注意事项，对其有详细解答。中途还会介绍涉及到的部分零碎知识。如有描述不准，望海
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>First post</title>
-    <link href="http://yoursite.com/2018/12/30/123/"/>
-    <id>http://yoursite.com/2018/12/30/123/</id>
+    <link href="http://yoursite.com/2018/12/30/First%20post/"/>
+    <id>http://yoursite.com/2018/12/30/First post/</id>
     <published>2018-12-30T05:32:01.000Z</published>
     <updated>2018-12-30T08:21:35.231Z</updated>
     
