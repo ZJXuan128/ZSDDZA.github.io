@@ -96,13 +96,17 @@
 
 
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="X">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="题目：假设你正在爬楼梯，需要n阶你才能到达楼顶。每次你可以爬1阶或2阶台阶。你有多少种不同的方法可以爬到楼顶呢？  这里将对此问题写出多个解法，包括一般容易实现的递归，以及它的一步一步优化。  贪心算法这是我看到题目后最先想到的也是十分麻烦的方法，但我觉得有必要拿出来看看。思路是，如果爬楼梯每次都选择同一种，即要么全走两阶大致（n的奇偶决定，暂且定为偶数便于理解）一共n/2次到达楼顶，要么全走一阶">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法题：爬楼梯">
+<meta property="og:url" content="http://yoursite.com/2019/05/10/算法题：爬楼梯/index.html">
 <meta property="og:site_name" content="X">
+<meta property="og:description" content="题目：假设你正在爬楼梯，需要n阶你才能到达楼顶。每次你可以爬1阶或2阶台阶。你有多少种不同的方法可以爬到楼顶呢？  这里将对此问题写出多个解法，包括一般容易实现的递归，以及它的一步一步优化。  贪心算法这是我看到题目后最先想到的也是十分麻烦的方法，但我觉得有必要拿出来看看。思路是，如果爬楼梯每次都选择同一种，即要么全走两阶大致（n的奇偶决定，暂且定为偶数便于理解）一共n/2次到达楼顶，要么全走一阶">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-09T16:51:48.138Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="X">
+<meta name="twitter:title" content="算法题：爬楼梯">
+<meta name="twitter:description" content="题目：假设你正在爬楼梯，需要n阶你才能到达楼顶。每次你可以爬1阶或2阶台阶。你有多少种不同的方法可以爬到楼顶呢？  这里将对此问题写出多个解法，包括一般容易实现的递归，以及它的一步一步优化。  贪心算法这是我看到题目后最先想到的也是十分麻烦的方法，但我觉得有必要拿出来看看。思路是，如果爬楼梯每次都选择同一种，即要么全走两阶大致（n的奇偶决定，暂且定为偶数便于理解）一共n/2次到达楼顶，要么全走一阶">
 
 
 
@@ -111,7 +115,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/10/算法题：爬楼梯/">
 
 
 
@@ -121,7 +125,7 @@
   };
 </script>
 
-  <title>X</title>
+  <title>算法题：爬楼梯 | X</title>
   
 
 
@@ -169,8 +173,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <a href="https://github.com/ZSDDZA" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
@@ -214,7 +217,7 @@
         
         
           
-          <li class="menu-item menu-item-home menu-item-active">
+          <li class="menu-item menu-item-home">
 
     
     
@@ -361,9 +364,9 @@
           
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -395,10 +398,8 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/10/算法题：爬楼梯/" class="post-title-link" itemprop="url">算法题：爬楼梯</a>
+          <h1 class="post-title" itemprop="name headline">算法题：爬楼梯
+
               
             
           </h1>
@@ -461,9 +462,7 @@
       
 
       
-        
-          
-            <p><strong><em>题目：假设你正在爬楼梯，需要n阶你才能到达楼顶。每次你可以爬1阶或2阶台阶。你有多少种不同的方法可以爬到楼顶呢？</em></strong></p>
+        <p><strong><em>题目：假设你正在爬楼梯，需要n阶你才能到达楼顶。每次你可以爬1阶或2阶台阶。你有多少种不同的方法可以爬到楼顶呢？</em></strong></p>
 <hr>
 <p>这里将对此问题写出多个解法，包括一般容易实现的递归，以及它的一步一步优化。</p>
 <hr>
@@ -491,8 +490,6 @@
 <p>张佳轩</p>
 <p>:::</p>
 
-          
-        
       
     </div>
 
@@ -513,216 +510,41 @@
 
       <div>
        
+       <div>
+    
+        <div style="text-align:center;color: black;font-size:24px;">-------------END<i class="fa fa-hand-paper-o" color:black"=""></i>THANKS-------------</div>
+    
+</div>
+
+       
       </div>
 
     <footer class="post-footer">
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/07/异常处理/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="X">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="X">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/07/异常处理/" class="post-title-link" itemprop="url">异常处理</a>
-              
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
+              <a href="/2019/05/07/异常处理/" rel="next" title="异常处理">
+                <i class="fa fa-chevron-left"></i> 异常处理
+              </a>
             
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-05-07 12:13:15 / 修改时间：12:54:07" itemprop="dateCreated datePublished" datetime="2019-05-07T12:13:15+08:00">2019-05-07</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p><em>引言：每当人们接触事物时不免产生对其基本概念的哲学思考。也许对人来讲，一句简单的“我是谁？”就足足困扰了哲学家千年，但面对计算机，有些问题却显得容易回答得多了。曾听闻一个观点，研究自然科学是相当困难的，因为对象是自然界，是通过既有的方法与认知对现象进行解读，是在未知中探索；而对于学习一些人们既定的规则也好，生产工具也罢，相对是容易的，因为这些东西都是人类创造产生的，为了提升生产效率等各方面原因，人不必为难自己，一切一定以最易接受和使用为前提。如今想来有些道理，我们有意图所以我们创造，创造工具，构建规则，便利自己。<br>（这篇文章以异常处理为主线讲述，异常这个概念的产生，由何而来，产生的意义，对于它的存在进行探讨。以广义入手，实践落实在 Python3 的应用上 ）</em></p>
-<h2 id="异常是什么？"><a href="#异常是什么？" class="headerlink" title="异常是什么？"></a>异常是什么？</h2><ul>
-<li><strong>标准概念</strong>：异常指的是在程序运行过程中发生的异常事件，通常是由外部问题（如硬件错误、输入错误）所导致的。在Python、Java等面向对象的编程语言中异常属于对象。</li>
-<li><strong>个人理解</strong>：一般来讲异常是个事件，在程序<font color="#DC143C">运行</font>时大多不会被处理，而影响了程序的正常执行。对于程序来讲，其语句或表达式在语法上是正确的，但在尝试执行时，这个事件（异常）会引发错误。这里先入为主地讲，一些面向对象的编程语言将此事件引发的错误抽象成一个对象，亦命名为“异常”，所有异常对象组成一个类。在 Python 中, 所有异常都必须是从 BaseException 派生的类的实例。<blockquote>
-<p><em>更多异常在Python中的细节，建议阅读<a href="https://docs.python.org/3/tutorial/errors.html" target="_blank" rel="noopener">官方文档</a>。需要注意的是，在Python中标准的异常类型是内置的标识符（而不是保留关键字）。<br>（注：大致浏览完文档后，会发现之前先入为主的观点是有些不全面的，为了符合人对于异常的第一印象和某种潜在认知，此前我隐式地将异常与错误等同，其实在Python中，异常不仅仅是以Error作为尾缀的，即有些异常在某种层面上来讲并不是一个错误，而更像是之前讲的，导致程序无法正常执行的事件。）</em></p>
-</blockquote>
-</li>
-</ul>
-<p><strong>说了这么多，异常存在的意义是什么呢？</strong><br>其实是把”程序无法正常进行“这件事更抽象化的集中起来，归为一类。面向对象编程具有更高的整合能力，一个类是具有相同的方法和属性的，这样使我们对于这类事件有了更统一化且流程化的处理方式。这样的处理方式我们称为“异常处理”。</p>
-<h2 id="异常处理是什么？"><a href="#异常处理是什么？" class="headerlink" title="异常处理是什么？"></a>异常处理是什么？</h2><p>上文似乎已经回答了这个问题，但不妨碍我们再深入探究一下。惯例先来一下官方一点的定义<br><em>Wiki：异常处理，是编程语言或计算机硬件里的一种机制，用于处理软件或信息系统中出现的异常状况（即超出程序正常执行流程的某些特殊条件）。</em><br>追根溯源一下，其实在本文讨论的异常处理这种方式出现前，人们对于软硬件不能正常操作时，系统设置了错误代码，即 error code ,对于不同的错误代码有不同的原因导致，操作者可以对其进行识别并找到原因。这样说不够直观，给个例子，比如网页的错误代码  404 ，不用多说相信很多人都见过类似的错误代码。error code 算是异常处理某种意义上的前生，异常处理是代替日渐衰落的error code方法的新法，提供error code 所未能具体的优势。<br><strong>接下来讨论对于编程来讲，这样的处理方式与传统的返回标志配合选择结构有什么区别和优势呢？</strong><br>拿大家应该都熟悉的C语言举例吧，早期我们对于c语言的异常处理机制，通常是我们认为的对返回结果加一些标志来进行判定，如发生错误返回什么标志，正常情况下我们又是返回什么标记，对于不同的标志我们借助选择结构去进行不同的处理，但这些都不是语言本身所赋予我们的，这种机制的问题在于，C语言的异常处理机制全是我们人为的定义，过度的自由往往会导致难以驾驭的混乱产生，如果没有体制化的规则或规范产生，就会造成业务逻辑的主线受到异常处理的牵制，或者说是我们难免会将注意力转移，并且造成业务逻辑与异常处理之间有很大程度上的缠绕。而对于Python来说，它有内部有已经构建好的异常类，我们使用expection的机制，对这些使程序无法正常运行的事件经行捕获和处理，更加方便，使我们有更多的精力专注于业务逻辑，而不必要使主线与异常处理的方式过度耦合而导致难以维护，降低整个系统或程序的灵活性。<br>处理本身的讨论价值已经所剩无多，接下来的应该是这个过程的实现，也就是异常机制。<br><strong>机制问题：</strong></p>
-<ul>
-<li>程序执行方面，大部分常见的程序设计语言，都是沿着函数调用栈的函数调用逆向搜索，直到遇到异常处理代码为止。一般在这个异常处理代码的搜索过程中逐级完成栈卷回。</li>
-<li>语法方面，多数语言的异常机制的语法是类似的：用throw或<font color="#1E90FF">raise</font>抛出一个异常对象（Java或C++等）；异常处理代码的作用范围用标记子句（<font color="#1E90FF">try</font>或begin开始的语言作用域）标示其起始，以第一个异常处理子句（catch,<font color="#1E90FF">expect</font>, resuce等）标示其结束；可连续出现若干个异常处理子句，每个处理特定类型的异常。某些语言允许<font color="#1E90FF">else</font>子句，用于无异常出现的情况。更多见的是<font color="#1E90FF">finally</font>, ensure子句，无论是否出现异常它都将执行，用于释放异常处理所需的一些资源。（蓝色为Python所采用的关键字）</li>
-</ul>
-<p><strong>大致介绍一下Python中关键字的原理</strong><br>由 <font color="#FF8C00">try</font> 讲起，作为处理机制的起始关键词，try的工作原理是如下（引用自<a href="https://docs.python.org/3/tutorial/errors.html" target="_blank" rel="noopener">官方文档</a>）</p>
-<ul>
-<li>首先，执行 try 子句 （try 和 except 关键字之间的（多行）语句）。</li>
-<li>如果没有异常发生，则跳过 except 子句 并完成 try 语句的执行。</li>
-<li>如果在执行try 子句时发生了异常，则跳过该子句中剩下的部分。然后，如果异常的类型和 except 关键字后面的异常匹配，则执行 except 子句 ，然后继续执行 try 语句之后的代码。</li>
-<li>如果发生的异常和 except 子句中指定的异常不匹配，则将其传递到外部的 try 语句中；如果没有找到处理程序，则它是一个 未处理异常，执行将停止并显示如上所示的消息。<blockquote>
-<p>try会控制一个子句，这个子句通常是我们想要测试是否会出现异常的代码段或者会经常出现过多与不可知问题的代码段，try界定了这样的一个范围。</p>
-</blockquote>
-</li>
-</ul>
-<p>与try搭配的就是 <font color="#FF8C00">expect</font> ，那么工作原理：一个 try 语句可能有多个 except 子句，以指定不同异常的处理程序。 最多会执行一个处理程序。 处理程序只处理相应的 try 子句中发生的异常，而不处理同一 try 语句内其他处理程序中的异常。基类的expect语句兼容派生类，反之不然。往往最后的 except 子句可以省略异常名，以用作通配符。</p>
-<blockquote>
-<p>expect的作用浅显易懂，与try搭配起来使用倒也有点 switch-case 的感觉，不过语法更简单，应用更灵活。</p>
-</blockquote>
-<p>主体讲完了，接下来说说可选子句，用做扩充。<br>首先<font color="#FF8C00">else</font>子句，在使用时必须放在所有的 except 子句后面。对于在try 子句不引发异常时必须执行的代码来说很有用。</p>
-<blockquote>
-<p>有时如果不给予通配符，而try语句中的代码出现未能捕获的异常，else的存在就降低了这种情况的出现。</p>
-</blockquote>
-<p><em>至于异常的 <font color="#FF8C00">args</font> 和 <font color="#FF8C00">__str__()</font> ，这里不多赘述。</em><br>抛出异常 <font color="#FF8C00">raise</font> ，有唯一指定参数——异常的实例或类。</p>
-<blockquote>
-<p>问题来了，为什么需要抛出异常呢？有时是对异常进行一定处理后再次扔出，一般的考虑是只想确定是否会抛出异常，或者抛出后还有处理。然而有时候还会和用户自定义异常结合使用，这时候就凸显出其功能。</p>
-</blockquote>
-<p><font color="#FF8C00">用户自定义异常</font>。还记得之前提到过在Python中所有的异常都必须是从 BaseException 派生的类的实例，而这里要强调的是<font color="#1E90FF#DC143C">用户自定义的异常并不是从这个基类直接派生的，而是从 Exception 直接继承或间接继承的，尽管 Exception 是从 BaseException 继承来的。</font><br>最后也就是<font color="#FF8C00">finally</font>，它可以让操作者定义一个清洗行为，finally 子句 总会在离开 try 语句前被执行，无论是否发生了异常。当在 try 子句中发生了异常且尚未被 except 子句处理（或者它发生在 except 或 else 子句中）时，它将在 finally 子句执行后被重新抛出。 当 try 语句的任何其他子句通过 break, continue 或 return 语句离开时，finally 也会在“离开之前”被执行。</p>
-<blockquote>
-<p>在实际应用程序中，finally子句对于释放外部资源（例如文件或者网络连接）非常有用，无论是否成功使用资源。</p>
-</blockquote>
-<p>短暂的介绍只是为了简单回顾和把各个关键词的价值所在指出。</p>
-<h2 id="接下来介绍两种异常处理的基本模型。"><a href="#接下来介绍两种异常处理的基本模型。" class="headerlink" title="接下来介绍两种异常处理的基本模型。"></a>接下来介绍两种异常处理的基本模型。</h2><p><em>第一种为中止模型，另一种为继续模型，或称恢复模型。实际使用方面我们对中止模型用的比较多，这个模型比较实用，而继续模型则不是那么的应用普遍。</em></p>
-<ul>
-<li>中止模型 ：<br>假设错误非常严重，已至你无法在回到错误发生的地方，也就是说，这段程序经过判断认为，他已经没有办法挽回，于是就抛出异常。</li>
-<li><p>继续模型：<br>这种模型的主旨是恢复当前的运行环境，然后希望能够重新回到错误的发生地，并希望第二次的尝试能够获得成功，这种模型通常为操作系统所应用。</p>
-<blockquote>
-<p>虽然恢复模型开始显得很吸引人，并且人们使用的操作系统也支持恢复模型的异常处理,但程序员们最终还是转向了使用类似”终止模型”的代码。因为：处理程序必须关注异常抛出的地点，这势必要包含依赖于抛出位置的非通用性代码。这增加了代码编写和维护的困难，对于异常可能会从许多地方抛出的大型程序来说，更是如此。</p>
-</blockquote>
-<p>完</p>
-</li>
-</ul>
-<hr>
-<p>本文的理想受众不是那些对异常处理毫无认知的人群，而是有初步了解且至少做过一些实践哪怕几行的小程序的这类人，用于更深入的思考和理解一些本质问题，而不是受限于语法句式的细节问题，因而未曾加入代码片段。如需大量代码段，推荐阅读<a href="https://docs.python.org/3/tutorial/errors.html" target="_blank" rel="noopener">官方文档</a>。相比于语法规范和语言特性，本文更集中于思考”定义、概念、存在“的价值，加入了不少主观的感受和理解，如有异议、疑惑欢迎讨论，有错误也欢迎斧正。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-      <div>
-       
-      </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -732,322 +554,15 @@
   </article>
 
 
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/02/博客创建问题及解决摘要/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="X">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="X">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/01/02/博客创建问题及解决摘要/" class="post-title-link" itemprop="url">博客创建问题及解决摘要</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-01-02 22:56:41 / 修改时间：23:26:19" itemprop="dateCreated datePublished" datetime="2019-01-02T22:56:41+08:00">2019-01-02</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>以下为本博客创建时所遇到的一些疑难问题与所关注过的注意事项，对其有详细解答。中途还会介绍涉及到的部分零碎知识。如有描述不准，望海涵斧正。<a href="https://www.cnblogs.com/fengxiongZz/p/7707219.html" target="_blank" rel="noopener">(参考的安装教程)</a></p>
-<h1 id="一、Node-js-amp-Github环境搭建"><a href="#一、Node-js-amp-Github环境搭建" class="headerlink" title="一、Node.js &amp; Github环境搭建"></a>一、Node.js &amp; Github环境搭建</h1><h5 id="①、下载安装时避免将两个环境置入同一个文件夹"><a href="#①、下载安装时避免将两个环境置入同一个文件夹" class="headerlink" title="①、下载安装时避免将两个环境置入同一个文件夹"></a>①、下载安装时避免将两个环境置入同一个文件夹</h5><h5 id="②、创建Github项目时以“账户名-github-io”为格式"><a href="#②、创建Github项目时以“账户名-github-io”为格式" class="headerlink" title="②、创建Github项目时以“账户名.github.io”为格式"></a>②、创建Github项目时以“账户名.github.io”为格式</h5><h2 id="—————进入正题—————"><a href="#—————进入正题—————" class="headerlink" title="—————进入正题—————"></a>—————<em>进入正题</em>—————</h2><p><del>这里出现问题比较多，需要重点关注</del></p>
-<h1 id="二、安装hexo"><a href="#二、安装hexo" class="headerlink" title="二、安装hexo"></a>二、<strong>安装hexo</strong></h1><h3 id="1、使用npm安装Github"><a href="#1、使用npm安装Github" class="headerlink" title="1、使用npm安装Github"></a>1、使用npm安装Github</h3><p><strong><em>问题Ⅰ：</em></strong>首次用npm安装Github时，一段进度条会一直无法“前进”，安装进度停滞不前。<br><strong>剖析：</strong>首先，简单介绍一下npm。</p>
-<blockquote>
-<p>npm是随同NodeJS一起安装的包(package)管理工具，能解决NodeJS代码部署上的很多问题。<br>它由三个独立的部分组成：</p>
-<ul>
-<li>网站</li>
-<li>注册表(registry)</li>
-<li>命令行工具(CLI)<br>由于众所周知的原因，国内访问外国网站时一直不怎么流畅，就此问题而言，比起搭梯子，一个淘宝镜像来的更方便快捷。:D<br>那么接下来就是讲一下镜像了。<br>镜像是冗余的一种类型，一个磁盘上的数据在另一个磁盘上存在一个完全相同的副本即为镜像。<br>根据这个描述，可以知道这个淘宝NPM镜像（可以从网络轻松获得，复制停滞进度条前的代码百度即可）是用来替代官方版本的完整镜像，可以完美解决此问题。<br>附上镜像：<code>npm config set registry https://registry.npm.taobao.org</code>  （退出原有的控制台，再次进入安装hexo的文件夹中，直接在命令行中输入即可）</li>
-</ul>
-</blockquote>
-<h3 id="2、关联hexo和Github-page"><a href="#2、关联hexo和Github-page" class="headerlink" title="2、关联hexo和Github page"></a>2、关联hexo和Github page</h3><p><strong><em>问题Ⅱ：</em></strong><font color="#9932CC"> .ssh </font>文件夹及涉及问题<br><strong>具体描述及解决措施：</strong></p>
-<ul>
-<li>①描述：在Git Bash的命令框中输入<code>cd ~/.ssh</code>时，反馈没有此文件夹。<br>解决方案：正常现象，可以继续教程的下一步，系统会自动创建.ssh文件夹。<br>即输入<code>ssh-keygen -t rsa -C “your email address”</code> <font color="#DC143C">(所有指令中注意空格不可略、不可多)</font><br>然后就没什么多说的了，回车就完事了。这时<font color="#9932CC"> .ssh </font>文件夹中会出现两个文件，一个是公钥一个是私钥。这就牵扯到密码学的RSA加密算法<del>在前面输入指令中出现过</del>。简单来说公钥是可公开信息，而私钥是你自己保管。通过一系列算法保证信息安全性。因为对极大整数做因数分解的难度决定了RSA算法的可靠性（不是简单入门的素数判断哦）穷举可破解，但时间得不偿失😊。</li>
-<li>②描述：在hexo文件夹中，找到_config.yml文件并修改时需要注意的事项。<br>  第一这类文件对格式要求即为严格，<font color="#DC143C"> 每个冒号后必须要使用一个空格 </font>，对它的修改在后来配置自己博客时经常出现，所以需要牢记。不然本地检测会报错。<br><img src="\images\error.jpg" alt="错误实例" title="从朋友那爬了一张图"><br>  第二修改时会有一项<code>repository:</code>     注意使用的是github上项目的SSH不是HTTP！不是HTTP！<del>没有第三遍</del></li>
-</ul>
-<p>至此基本总结结束，后续也许会修改</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-      <div>
-       
-      </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/30/First post/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="X">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="X">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/12/30/First post/" class="post-title-link" itemprop="url">First post</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-12-30 13:32:01 / 修改时间：16:21:35" itemprop="dateCreated datePublished" datetime="2018-12-30T13:32:01+08:00">2018-12-30</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p> I konw it seems like the world is crumbling out there,but it is actually a great time in your life to get a little crazy.Follow your curiosity,and be ambitious about it.Don’t give up your dreams. The world needs you all!</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-      <div>
-       
-      </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -1068,8 +583,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -1122,6 +646,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#贪心算法"><span class="nav-number">1.</span> <span class="nav-text">贪心算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#树形递归模拟爬楼梯"><span class="nav-number">2.</span> <span class="nav-text">树形递归模拟爬楼梯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记忆化递归"><span class="nav-number">3.</span> <span class="nav-text">记忆化递归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态规划"><span class="nav-number">4.</span> <span class="nav-text">动态规划</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#斐波那契数列"><span class="nav-number">5.</span> <span class="nav-text">斐波那契数列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩阵快速幂"><span class="nav-number">6.</span> <span class="nav-text">矩阵快速幂</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -1258,6 +799,10 @@
 
 
   
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
 
   
 
