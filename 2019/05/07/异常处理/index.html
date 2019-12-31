@@ -103,7 +103,7 @@
 <meta property="og:site_name" content="X">
 <meta property="og:description" content="引言：每当人们接触事物时不免产生对其基本概念的哲学思考。也许对人来讲，一句简单的“我是谁？”就足足困扰了哲学家千年，但面对计算机，有些问题却显得容易回答得多了。曾听闻一个观点，研究自然科学是相当困难的，因为对象是自然界，是通过既有的方法与认知对现象进行解读，是在未知中探索；而对于学习一些人们既定的规则也好，生产工具也罢，相对是容易的，因为这些东西都是人类创造产生的，为了提升生产效率等各方面原因，人">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-07T04:54:07.189Z">
+<meta property="og:updated_time" content="2019-08-07T07:10:40.269Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="异常处理">
 <meta name="twitter:description" content="引言：每当人们接触事物时不免产生对其基本概念的哲学思考。也许对人来讲，一句简单的“我是谁？”就足足困扰了哲学家千年，但面对计算机，有些问题却显得容易回答得多了。曾听闻一个观点，研究自然科学是相当困难的，因为对象是自然界，是通过既有的方法与认知对现象进行解读，是在未知中探索；而对于学习一些人们既定的规则也好，生产工具也罢，相对是容易的，因为这些东西都是人类创造产生的，为了提升生产效率等各方面原因，人">
@@ -424,12 +424,24 @@
                 
               
 
-              <time title="创建时间：2019-05-07 12:13:15 / 修改时间：12:54:07" itemprop="dateCreated datePublished" datetime="2019-05-07T12:13:15+08:00">2019-05-07</time>
+              <time title="创建时间：2019-05-07 12:13:15" itemprop="dateCreated datePublished" datetime="2019-05-07T12:13:15+08:00">2019-05-07</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-07 15:10:40" itemprop="dateModified" datetime="2019-08-07T15:10:40+08:00">2019-08-07</time>
               
             
           </span>
@@ -474,7 +486,7 @@
 <h2 id="异常处理是什么？"><a href="#异常处理是什么？" class="headerlink" title="异常处理是什么？"></a>异常处理是什么？</h2><p>上文似乎已经回答了这个问题，但不妨碍我们再深入探究一下。惯例先来一下官方一点的定义<br><em>Wiki：异常处理，是编程语言或计算机硬件里的一种机制，用于处理软件或信息系统中出现的异常状况（即超出程序正常执行流程的某些特殊条件）。</em><br>追根溯源一下，其实在本文讨论的异常处理这种方式出现前，人们对于软硬件不能正常操作时，系统设置了错误代码，即 error code ,对于不同的错误代码有不同的原因导致，操作者可以对其进行识别并找到原因。这样说不够直观，给个例子，比如网页的错误代码  404 ，不用多说相信很多人都见过类似的错误代码。error code 算是异常处理某种意义上的前生，异常处理是代替日渐衰落的error code方法的新法，提供error code 所未能具体的优势。<br><strong>接下来讨论对于编程来讲，这样的处理方式与传统的返回标志配合选择结构有什么区别和优势呢？</strong><br>拿大家应该都熟悉的C语言举例吧，早期我们对于c语言的异常处理机制，通常是我们认为的对返回结果加一些标志来进行判定，如发生错误返回什么标志，正常情况下我们又是返回什么标记，对于不同的标志我们借助选择结构去进行不同的处理，但这些都不是语言本身所赋予我们的，这种机制的问题在于，C语言的异常处理机制全是我们人为的定义，过度的自由往往会导致难以驾驭的混乱产生，如果没有体制化的规则或规范产生，就会造成业务逻辑的主线受到异常处理的牵制，或者说是我们难免会将注意力转移，并且造成业务逻辑与异常处理之间有很大程度上的缠绕。而对于Python来说，它有内部有已经构建好的异常类，我们使用expection的机制，对这些使程序无法正常运行的事件经行捕获和处理，更加方便，使我们有更多的精力专注于业务逻辑，而不必要使主线与异常处理的方式过度耦合而导致难以维护，降低整个系统或程序的灵活性。<br>处理本身的讨论价值已经所剩无多，接下来的应该是这个过程的实现，也就是异常机制。<br><strong>机制问题：</strong></p>
 <ul>
 <li>程序执行方面，大部分常见的程序设计语言，都是沿着函数调用栈的函数调用逆向搜索，直到遇到异常处理代码为止。一般在这个异常处理代码的搜索过程中逐级完成栈卷回。</li>
-<li>语法方面，多数语言的异常机制的语法是类似的：用throw或<font color="#1E90FF">raise</font>抛出一个异常对象（Java或C++等）；异常处理代码的作用范围用标记子句（<font color="#1E90FF">try</font>或begin开始的语言作用域）标示其起始，以第一个异常处理子句（catch,<font color="#1E90FF">expect</font>, resuce等）标示其结束；可连续出现若干个异常处理子句，每个处理特定类型的异常。某些语言允许<font color="#1E90FF">else</font>子句，用于无异常出现的情况。更多见的是<font color="#1E90FF">finally</font>, ensure子句，无论是否出现异常它都将执行，用于释放异常处理所需的一些资源。（蓝色为Python所采用的关键字）</li>
+<li>语法方面，多数语言的异常机制的语法是类似的：用throw或<font color="#1E90FF">raise</font>抛出一个异常对象（Java或C++等）；异常处理代码的作用范围用标记子句（<font color="#1E90FF">try</font>或begin开始的语言作用域）标示其起始，以第一个异常处理子句（catch,<font color="#1E90FF">expect</font>, rescue等）标示其结束；可连续出现若干个异常处理子句，每个处理特定类型的异常。某些语言允许<font color="#1E90FF">else</font>子句，用于无异常出现的情况。更多见的是<font color="#1E90FF">finally</font>, ensure子句，无论是否出现异常它都将执行，用于释放异常处理所需的一些资源。（蓝色为Python所采用的关键字）</li>
 </ul>
 <p><strong>大致介绍一下Python中关键字的原理</strong><br>由 <font color="#FF8C00">try</font> 讲起，作为处理机制的起始关键词，try的工作原理是如下（引用自<a href="https://docs.python.org/3/tutorial/errors.html" target="_blank" rel="noopener">官方文档</a>）</p>
 <ul>
@@ -640,7 +652,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -708,7 +720,7 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
