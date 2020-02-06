@@ -96,17 +96,17 @@
 
 
 
-  <meta name="description" content="浮点算术在计算机领域的广泛应用不必多说。应该大多数人都有这样的经历，总是在不经意间会遇到浮点运算的一些不满足预期的奇怪输出。这里主要来探讨一下个中奥秘。首先，我们都明白，大多数十进制小数都不能精确地表示为二进制小数，这导致在大多数情况下，你输入的十进制浮点数都只能近似地以二进制浮点数形式储存在计算机中。用十进制来理解这个问题显得更加容易一些。考虑分数$1/3$。我们可以得到它在十进制下的一个近似值">
+  <meta name="description" content="第一部分：Tensorflow基础Tensors张量常量constant:‘’’pythonx = tf.constant([[4,2],[9,5]])print(x) tf.Tensor([[4 2] [9 5]], shape=(2, 2), dtype=int32)‘’’ 可以通过“.numpy()”来得到numpy array类型 ‘’’pythonx.numpy() array([[4,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="浮点的限制与争议">
-<meta property="og:url" content="http://yoursite.com/2019/05/19/浮点的限制与争议/index.html">
+<meta property="og:title" content="tensorflow基础">
+<meta property="og:url" content="http://yoursite.com/2020/02/03/tensorflow基础/index.html">
 <meta property="og:site_name" content="X">
-<meta property="og:description" content="浮点算术在计算机领域的广泛应用不必多说。应该大多数人都有这样的经历，总是在不经意间会遇到浮点运算的一些不满足预期的奇怪输出。这里主要来探讨一下个中奥秘。首先，我们都明白，大多数十进制小数都不能精确地表示为二进制小数，这导致在大多数情况下，你输入的十进制浮点数都只能近似地以二进制浮点数形式储存在计算机中。用十进制来理解这个问题显得更加容易一些。考虑分数$1/3$。我们可以得到它在十进制下的一个近似值">
+<meta property="og:description" content="第一部分：Tensorflow基础Tensors张量常量constant:‘’’pythonx = tf.constant([[4,2],[9,5]])print(x) tf.Tensor([[4 2] [9 5]], shape=(2, 2), dtype=int32)‘’’ 可以通过“.numpy()”来得到numpy array类型 ‘’’pythonx.numpy() array([[4,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-19T05:21:25.407Z">
+<meta property="og:updated_time" content="2020-02-06T04:11:56.931Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="浮点的限制与争议">
-<meta name="twitter:description" content="浮点算术在计算机领域的广泛应用不必多说。应该大多数人都有这样的经历，总是在不经意间会遇到浮点运算的一些不满足预期的奇怪输出。这里主要来探讨一下个中奥秘。首先，我们都明白，大多数十进制小数都不能精确地表示为二进制小数，这导致在大多数情况下，你输入的十进制浮点数都只能近似地以二进制浮点数形式储存在计算机中。用十进制来理解这个问题显得更加容易一些。考虑分数$1/3$。我们可以得到它在十进制下的一个近似值">
+<meta name="twitter:title" content="tensorflow基础">
+<meta name="twitter:description" content="第一部分：Tensorflow基础Tensors张量常量constant:‘’’pythonx = tf.constant([[4,2],[9,5]])print(x) tf.Tensor([[4 2] [9 5]], shape=(2, 2), dtype=int32)‘’’ 可以通过“.numpy()”来得到numpy array类型 ‘’’pythonx.numpy() array([[4,">
 
 
 
@@ -115,7 +115,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/05/19/浮点的限制与争议/">
+  <link rel="canonical" href="http://yoursite.com/2020/02/03/tensorflow基础/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title>浮点的限制与争议 | X</title>
+  <title>tensorflow基础 | X</title>
   
 
 
@@ -381,7 +381,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/19/浮点的限制与争议/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/tensorflow基础/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="X">
@@ -398,7 +398,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">浮点的限制与争议
+          <h1 class="post-title" itemprop="name headline">tensorflow基础
 
               
             
@@ -424,12 +424,24 @@
                 
               
 
-              <time title="创建时间：2019-05-19 12:22:38 / 修改时间：13:21:25" itemprop="dateCreated datePublished" datetime="2019-05-19T12:22:38+08:00">2019-05-19</time>
+              <time title="创建时间：2020-02-03 12:11:06" itemprop="dateCreated datePublished" datetime="2020-02-03T12:11:06+08:00">2020-02-03</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-02-06 12:11:56" itemprop="dateModified" datetime="2020-02-06T12:11:56+08:00">2020-02-06</time>
               
             
           </span>
@@ -462,14 +474,38 @@
       
 
       
-        <p>浮点算术在计算机领域的广泛应用不必多说。应该大多数人都有这样的经历，总是在不经意间会遇到浮点运算的一些不满足预期的奇怪输出。这里主要来探讨一下个中奥秘。<br>首先，我们都明白，大多数十进制小数都不能精确地表示为二进制小数，这导致在大多数情况下，你输入的十进制浮点数都只能近似地以二进制浮点数形式储存在计算机中。用十进制来理解这个问题显得更加容易一些。考虑分数$1/3$。我们可以得到它在十进制下的一个近似值$0.3$，或者更接近$0.33$，或者更接近的$0.333……$无论你写下多少，永远只能更接近。同样，我们用$2$作为基数，$0.1$是永远也无法精确表示为二进制的小数。在二进制下，$1/10$是一个无限循环小数$0.0001100110011001100110011001100110011001100110011…$在任何一个位置停下都仅仅只是近似值。因此，在今天的大部分架构上，浮点数都只能近似地使用二进制小数表示，对应分数的分子使用每8字节的前53位表示，分母则表示为$2$的幂次(IEEE754)。在$1/10$这个例子中，相应的二进制分数是 $3602879701896397/2^{55}$ ，它很接近$1/10$，但并不是$1/10$。往往我们能观察到的输出结果精度达不到近似值有差异的地方。记住了，即使输出的结果看起来好像就是$1/10$的精确值，实际储存的值只是最接近$1/10$的计算机可表示的二进制分数。有趣的是，有许多不同的十进制数共享相同的最接近的近似二进制小数。例如，$0.1$、$0.10000000000000001$、$0.1000000000000000055511151231257827021181583404541015625$全都近似于$3602879701896397/2^{55}$。由于所有这些十进制值都具有相同的近似值，因此可以显示其中任何一个。<br>出现浮点运算不符合预期值的情况，其本质不是语言的限制，也不是代码的问题，你在所有支持在硬件中浮点运算的语言都会发现相同的情况。<br>有时我们想要更美观的输出，我们可以对小数进行格式化输出，但其实这并不影响浮点数在计算机里的存储值，只是见舍入后的结果进行显示而已。我们用Python举例。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; format(math.pi,&apos;.12g&apos;)</span><br><span class="line">&apos;3.14159265359&apos;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; format(math.pi,&apos;.2f&apos;)</span><br><span class="line">&apos;3.14&apos;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; format(math.pi)</span><br><span class="line">&apos;3.141592653589793&apos;</span><br></pre></td></tr></table></figure></p>
-<p>我们看到的输出结果只是表象而已，不理解内部的运算会在应用过程中产生很多问题。比如下面的例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; .1+.1+.1==.3</span><br><span class="line">Flase</span><br></pre></td></tr></table></figure></p>
-<p>我们无法将$2$为基数的$0.1$精确到十进制的$1/10$，对应的$0.3$同样无法精确。哪怕我们使用Python的$round()$函数预先舍入也无济于事。不过预后舍入就可以达到我们想要的效果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; round(.1,1)+round(.1,1)+round(.1,1)==round(.3,1)</span><br><span class="line">False</span><br><span class="line">&gt;&gt;&gt;round(.1+.1+.1,10)==round(.3,10)</span><br><span class="line">True</span><br></pre></td></tr></table></figure></p>
-<p>浮点数运算会造成许多这样的“意外”。不过大多数情况下一点误差是可以容忍的。需要注意的是，每次浮点运算都可能导致新的舍入错误。<br>对于需要精确十进制表示的使用场景，请尝试使用$decimal$模块，该模块实现了适合会计应用和高精度应用的十进制运算。<br>另一种形式的精确运算由$fractions$模块提供支持，该模块实现了基于有理数的算术运算（因此可以精确表示像$1/3$这样的数值）。<br>如果你是浮点运算的重度用户，你应该看一下数值运算Python包NumPy以及由SciPy项目所提供的许多其它数学和统计运算包。参见<a href="https://scipy.org" target="_blank" rel="noopener">https://scipy.org</a>。<br>Python也提供了一些工具，可以在你真的想要知道一个浮点数精确值的少数情况下提供帮助。例如float.as_integer_ratio()方法会将浮点数表示为一个分数:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; x=3.14159</span><br><span class="line">&gt;&gt;&gt; x.as_integer_ratio()</span><br><span class="line">(3537115888337719, 1125899906842624)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; x==3537115888337719/1125899906842624</span><br><span class="line">True</span><br></pre></td></tr></table></figure></p>
-<p>这样的表示法是精确的，可以跨版本移植，和别的标准相同的语言（Java、C99）交换数据。</p>
-<hr>
-<p>这里引出问题所在和基本的解决措施。下一篇将深入本质探讨此问题，包括IEEE754的相关具体细节。</p>
+        <h2 id="第一部分：Tensorflow基础"><a href="#第一部分：Tensorflow基础" class="headerlink" title="第一部分：Tensorflow基础"></a>第一部分：Tensorflow基础</h2><h3 id="Tensors张量"><a href="#Tensors张量" class="headerlink" title="Tensors张量"></a>Tensors张量</h3><h4 id="常量constant"><a href="#常量constant" class="headerlink" title="常量constant:"></a>常量constant:</h4><p>‘’’python<br>x = tf.constant([[4,2],[9,5]])<br>print(x)</p>
+<p>tf.Tensor(<br>[[4 2]<br> [9 5]], shape=(2, 2), dtype=int32)<br>‘’’</p>
+<p>可以通过“.numpy()”来得到numpy array类型</p>
+<p>‘’’python<br>x.numpy()</p>
+<p>array([[4, 2],<br>       [9, 5]], dtype=int32)<br>‘’</p>
+<p>像numpy一样，有shape和dtype属性</p>
+<p>‘’’python<br>print(‘shape:’,x.shape)<br>print(‘dx.dtype)</p>
+<p>(2, 2)</p>
+<p><dtype: 'int32'=""><br>‘’’</dtype:></p>
+<p>常用的产生常量的方法是tf.ones和tf.zeros就像numpy的np.ones``np.zeros</p>
+<p>‘’’python<br>print(tf.ones(shape=(2,3)))<br>print(tf.zeros(shape=(3,2)))</p>
+<p>tf.Tensor(<br>[[1. 1. 1.]<br> [1. 1. 1.]], shape=(2, 3), dtype=float32)<br>tf.Tensor(<br>[[0. 0.]<br> [0. 0.]<br> [0. 0.]], shape=(3, 2), dtype=float32)<br>‘’’</p>
+<h3 id="随机数常量random-constant正态分布"><a href="#随机数常量random-constant正态分布" class="headerlink" title="随机数常量random constant正态分布"></a>随机数常量random constant正态分布</h3><p>‘’’python<br>tf.random.normal(shape=(2,2),mean=0,stddev=1.0)</p>
+<tf.tensor: id="12," shape="(2," 2),="" dtype="float32," numpy="array([[-0.05229542," 0.64488363],="" [="" 0.37966082,="" 1.0098479="" ]],="">
 
+<h1 id="整数均匀分布"><a href="#整数均匀分布" class="headerlink" title="整数均匀分布"></a>整数均匀分布</h1><p>tf.random.uniform(shape=(2,2),minval=0,maxval=10,dtype=tf.int32)</p>
+<p><tf.tensor: id="16," shape="(2," 2),="" dtype="int32," numpy="array([[6," 3],="" [8,="" 7]],=""><br>‘’’</tf.tensor:></p>
+<h3 id="Variables变量"><a href="#Variables变量" class="headerlink" title="Variables变量"></a>Variables变量</h3><p>变量是一种特别的张量，用来存储可变数值，需要用一些值来初始化<br>‘’’pyhon<br>initial_value = tf.random.normal(shape=(2,2))<br>a = tf.Variable(initial_value)<br>print(a)</p>
+<p><tf.variable 'variable:0'="" shape="(2," 2)="" dtype="float32," numpy="array([[" 0.07630513,="" -0.39769924],="" [-0.9712114="" ,="" -0.62955064]],=""><br>‘’’</tf.variable></p>
+<p>可以通过assign(value)来赋值“=”，或assign_add(value)“+=”，或assign_sub(value)“-=”<br>‘’’python<br>new_value = tf.random.normal(shape=(2, 2))<br>a.assign(new_value)<br>for i in range(2):<br>    for j in range(2):<br>        assert a[i, j] == new_value[i, j]</p>
+<p>added_value = tf.random.normal(shape=(2,2))<br>a.assign_add(added_value)<br>for i in range(2):<br>    for j in range(2):<br>        assert a[i,j] == new_value[i,j]+added_value[i,j]<br>‘’’</p>
+<h3 id="Tensorflow数学运算"><a href="#Tensorflow数学运算" class="headerlink" title="Tensorflow数学运算"></a>Tensorflow数学运算</h3><p>可以像numpy那样做作运算，Tensorflow的不同时这些运算可以放到GPU或TPU上执行<br>‘’’python<br>a = tf.random.normal(shape=(2,2))<br>b = tf.random.normal(shape=(2,2))<br>c = a+b<br>d = tf.square(c)<br>e = tf.exp(c)<br>print(a)<br>print(b)<br>print(c)<br>print(d)<br>print(e)</p>
+<p>tf.Tensor(<br>[[ 1.6862711 -1.4246397]<br> [-1.0287055 -1.3188182]], shape=(2, 2), dtype=float32)<br>tf.Tensor(<br>[[ 1.4519434  0.7635907]<br> [ 1.1213834 -1.4559215]], shape=(2, 2), dtype=float32)<br>tf.Tensor(<br>[[ 3.1382146  -0.661049  ]<br> [ 0.09267795 -2.7747397 ]], shape=(2, 2), dtype=float32)<br>tf.Tensor(<br>[[9.8483906e+00 4.3698579e-01]<br> [8.5892025e-03 7.6991806e+00]], shape=(2, 2), dtype=float32)<br>tf.Tensor(<br>[[23.062654    0.51630944]<br> [ 1.0971084   0.0623657 ]], shape=(2, 2), dtype=float32)<br>‘’’</p>
+<h2 id="GradientTape计算梯度"><a href="#GradientTape计算梯度" class="headerlink" title="GradientTape计算梯度"></a>GradientTape计算梯度</h2><p>和numpy的另一个不同是，可以自动跟踪任何变量的梯度。<br>打开一个GradientTape,然后通过tape.watch()来跟踪变量<br>‘’’python<br>a = tf.random.normal(shape=(2,2))<br>b = tf.random.normal(shape=(2,2))<br>with tf.GradientTape() as tape:<br>    tape.watch(a)#开始记录所有有关a参与过的运算<br>    c = tf.sqrt(tf.square(a)+tf.square(b)) #变量a做一些运算</p>
+<pre><code>#计算c对于a的梯度
+dc_da = tape.gradient(c,a)
+print(dc_da)
+</code></pre><p>tf.Tensor(<br>[[-0.53557533  0.87920487]<br> [ 0.24663754  0.4680054 ]], shape=(2, 2), dtype=float32)<br>‘’’</p>
+<p>对于所有变量，默认状态下会跟踪计算并用来求梯度，所以不用使用tape.watch()<br>‘’’python<br>a = tf.Variable(a)<br>with tf.GradientTape() as tape:<br>    c = tf.sqrt(tf.square(a)+tf.square(b))<br>    dc_da = tape.gradient(c,a)<br>    print(dc_da)</p>
+<p>tf.Tensor(<br>[[-0.53557533  0.87920487]<br> [ 0.24663754  0.4680054 ]], shape=(2, 2), dtype=float32)<br>‘’’<br>可以通过多开几个GradientTape来求高阶导数：<br>‘’’python<br>with tf.GradientTape() as outer_tape:<br>    with tf.GradientTape() as tape:<br>        c = tf.sqrt(tf.square(a)+tf.square(b))<br>        dc_da = tape.gradient(c,a)<br>    d2c_d2a = outer_tape.gradient(dc_da,a)<br>    print(d2c_d2a)</p>
+<p>tf.Tensor(<br>[[0.54411626 0.33872807]<br> [1.5284648  0.5024241 ]], shape=(2, 2), dtype=float32)<br>‘’’</p>
+</tf.tensor:>
       
     </div>
 
@@ -510,8 +546,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/10/算法题：爬楼梯/" rel="next" title="算法题：爬楼梯">
-                <i class="fa fa-chevron-left"></i> 算法题：爬楼梯
+              <a href="/2020/01/01/二分法/" rel="next" title="二分法">
+                <i class="fa fa-chevron-left"></i> 二分法
               </a>
             
           </div>
@@ -520,8 +556,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/05/26/sqlite3-SQLite数据库模块简单认识/" rel="prev" title="sqlite3-SQLite数据库模块简单认识">
-                sqlite3-SQLite数据库模块简单认识 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/02/06/激活函数/" rel="prev" title="激活函数">
+                激活函数 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -567,8 +603,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -621,6 +666,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一部分：Tensorflow基础"><span class="nav-number">1.</span> <span class="nav-text">第一部分：Tensorflow基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tensors张量"><span class="nav-number">1.1.</span> <span class="nav-text">Tensors张量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常量constant"><span class="nav-number">1.1.1.</span> <span class="nav-text">常量constant:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#随机数常量random-constant正态分布"><span class="nav-number">1.2.</span> <span class="nav-text">随机数常量random constant正态分布</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#整数均匀分布"><span class="nav-number"></span> <span class="nav-text">整数均匀分布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Variables变量"><span class="nav-number">0.1.</span> <span class="nav-text">Variables变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tensorflow数学运算"><span class="nav-number">0.2.</span> <span class="nav-text">Tensorflow数学运算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GradientTape计算梯度"><span class="nav-number">1.</span> <span class="nav-text">GradientTape计算梯度</span></a></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
