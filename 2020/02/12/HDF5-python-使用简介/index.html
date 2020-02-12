@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.6.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="引：在使用TensorFlow，学习回调函数时，使用了ModelCheckpoint()，产生了.h5的文件。为了了解回调函数产生的信息，需要了解HDF5的相关内容，以及在python中的使用与相关问题解决。文中一些叙述为了方便初次接触者理解，表述并不严谨，仅供简单参考。  初次见面HDF5（Hierarchical Data Formal）是用于存储大规模数值数据的较为理想的存储格式，文件后缀名">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HDF5--python 使用简介">
+<meta property="og:url" content="http://yoursite.com/2020/02/12/HDF5-python-使用简介/index.html">
+<meta property="og:site_name" content="X">
+<meta property="og:description" content="引：在使用TensorFlow，学习回调函数时，使用了ModelCheckpoint()，产生了.h5的文件。为了了解回调函数产生的信息，需要了解HDF5的相关内容，以及在python中的使用与相关问题解决。文中一些叙述为了方便初次接触者理解，表述并不严谨，仅供简单参考。  初次见面HDF5（Hierarchical Data Formal）是用于存储大规模数值数据的较为理想的存储格式，文件后缀名">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-02-12T15:56:28.834Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HDF5--python 使用简介">
+<meta name="twitter:description" content="引：在使用TensorFlow，学习回调函数时，使用了ModelCheckpoint()，产生了.h5的文件。为了了解回调函数产生的信息，需要了解HDF5的相关内容，以及在python中的使用与相关问题解决。文中一些叙述为了方便初次接触者理解，表述并不严谨，仅供简单参考。  初次见面HDF5（Hierarchical Data Formal）是用于存储大规模数值数据的较为理想的存储格式，文件后缀名">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/12/HDF5-python-使用简介/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>HDF5--python 使用简介 | X</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/ZSDDZA" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">X</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">x</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-schedule">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/schedule/" rel="section"><i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>日程表</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/12/HDF5-python-使用简介/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="X">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="X">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HDF5--python 使用简介
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-12 23:52:23 / 修改时间：23:56:28" itemprop="dateCreated datePublished" datetime="2020-02-12T23:52:23+08:00">2020-02-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><em>引：在使用TensorFlow，学习回调函数时，使用了ModelCheckpoint()，产生了.h5的文件。为了了解回调函数产生的信息，需要了解HDF5的相关内容，以及在python中的使用与相关问题解决。</em><br>文中一些叙述为了方便初次接触者理解，表述并不严谨，仅供简单参考。</p>
+<hr>
+<h2 id="初次见面"><a href="#初次见面" class="headerlink" title="初次见面"></a>初次见面</h2><p>HDF5（Hierarchical Data Formal）是用于存储大规模数值数据的较为理想的存储格式，文件后缀名为h5，存储读取速度非常快，且可在文件内部按照明确的层次存储数据，同一个HDF5可以看做一个高度整合的文件夹，其内部可存放不同类型的数据。</p>
+<p>在Python中操纵HDF5文件的方式主要有两种</p>
+<ul>
+<li>是利用<strong>pandas</strong>中内建的一系列HDF5文件操作相关的方法，来完成相关操作。</li>
+<li>二是利用<strong>h5py</strong>模块来完成Python原生数据结构与HDF5格式的转化</li>
+</ul>
+<p>本篇主要介绍hdf5的基础内容和对应模块使用的快速入门。</p>
+<h2 id="初遇时的差池"><a href="#初遇时的差池" class="headerlink" title="初遇时的差池"></a>初遇时的差池</h2><p><del>一段小插曲</del><br>HDF是HDF(Hierarchical Data File)是美国国家高级计算应用中心(National Center for Supercomputing Application,NCSA)为了满足各种领域研究需求而研制的一种能高效存储和分发科学数据的新型数据格式 。阅读的文档中提到了到国家卫星气象中心（NSMC）曾经发布过一份《HDF5.0 使用简介》,抱着些许迷信权威的心态阅读后发现它涉及的信息就我目前来说价值不大，其中主要有讲HDF5文件的组织，API，创建，数据集数据空间，组群，属性等等，内容大而全，但似乎这篇教材发布的相对较早，所以产生了一定的局限性并且内部的相关URL都失效了，它本身也在国家卫星气象中心的官网上没有什么存在的痕迹。相关的API只涉及了C和FORTRAN的外壳包装函数。对于像我这样在使用python且第一次接触HDF5的使用者并不友好，索性只读了开头的基础内容并建立了更详细的认知后就放弃了继续阅读的打算。</p>
+<h2 id="相识"><a href="#相识" class="headerlink" title="相识"></a>相识</h2><p>首先从hdf5文件讲起。</p>
+<p>HDF5文件具有两类存储对象，dataset和group。dataset是类似于数组的数据集，而group是类似文件夹一样的容器，存放dataset和其他group。</p>
+<p>HDF本意即是<strong>层次数据格式</strong>，所以就其存储结构来说是类似与POSIX风格的。其实现的方式就是group。每层都用’/‘分隔。我们创建的file object其实也可以看作一个group，是一个root group，其余的groups可以称为subgroups。</p>
+<p>dataset与numpy中的array相似，比如都具有shape、dtype、以及一些切片操作等。虽然与Numpy的数组在接口上很相近，但是支持更多对外透明的存储特征，如数据压缩，误差检测，分块传输。</p>
+<p>HDF5的一个很好的features就是可以在数据旁边存储元数据<sup><a href="#fn_1" id="reffn_1">1</a></sup>。所有的group和dataset都支持叫做<strong>属性</strong>的数据形式。</p>
+<h4 id="h5py"><a href="#h5py" class="headerlink" title="h5py"></a>h5py</h4><p>想到python一定有对应的文件解析库，于是我开始了h5py的“快速”入门。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">import h5py</span><br><span class="line"># 读取</span><br><span class="line">file = h5py.File(&apos;test.hdf5&apos;, &apos;r&apos;)# .hdf5与.h5意义相同</span><br><span class="line"># 一下也可以完成读取</span><br><span class="line">with h5py.File(&quot;mytestfile.hdf5&quot;, &quot;w&quot;) as f:</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"># 我们需要注意的是group（包括File对象）与python中的字典相似</span><br><span class="line"># 通过该方法可以获得对应group下的subgroups或datasets，返回包含字符串的列表</span><br><span class="line">f.keys()</span><br><span class="line"></span><br><span class="line"># 此时我们假设存在一个名为DataSet的dataset对象</span><br><span class="line"># 利用对应键来索引值的方法可以获取该对象</span><br><span class="line">dest = f[&apos;DataSet&apos;]</span><br><span class="line"></span><br><span class="line"># dataset对象满足我们平时使用的numpy数组的一些操作，如下：</span><br><span class="line">dest.shape</span><br><span class="line">dest.dtype</span><br><span class="line">dest[:]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 创建HDF5文件</span><br><span class="line">f = h5py.File(&apos;test.h5&apos;, &apos;w&apos;)</span><br><span class="line"></span><br><span class="line"># 使用create_dataset创建给定形状和数据类型的空dataset</span><br><span class="line">dataset = f.create_dataset(&apos;DS&apos;,(100,), dtype=&apos;i&apos;)</span><br><span class="line"># 也可以使用numpy中数组来初始化</span><br><span class="line">array = np.arange(100)</span><br><span class="line">dataset = f.create_dataset(&apos;init&apos;, data=array)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 分块存储</span><br><span class="line">&apos;&apos;&apos;</span><br><span class="line">在缺省设置下，HDF5数据集在内存中是连续布局的，也就是按照传统的C序。</span><br><span class="line">Dataset也可以在HDF5的分块存储布局下创建。</span><br><span class="line">也就是dataset被分为大小相同的若干块随意地分布在磁盘上，并使用B树建立索引。</span><br><span class="line">&apos;&apos;&apos;</span><br><span class="line"># 为了进行分块存储，将关键字设为一个元组来指示块的形状。</span><br><span class="line">dset = f.create_dataset(&quot;chunked&quot;, (1000, 1000), chunks=(100, 100))</span><br><span class="line"># 也可以自动分块，不必指定块的形状。</span><br><span class="line">dset = f.create_dataset(&quot;autochunk&quot;, (1000, 1000), chunks=True)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 分层结构</span><br><span class="line"># 遍历subgroups</span><br><span class="line">for name in f:</span><br><span class="line">    print(name)</span><br><span class="line"># 递归遍历所有subgroups</span><br><span class="line">def print_name(name):</span><br><span class="line">    print(name)</span><br><span class="line"></span><br><span class="line">f.visit(print_name)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 属性通过attrs成员访问，类似于python中词典格式。</span><br><span class="line"> dataset.attrs[&apos;bias&apos;] = 60</span><br><span class="line"> &apos;bias&apos; in dataset.attrs</span><br></pre></td></tr></table></figure>
+<p>一些其他的特性</p>
+<ol>
+<li>滤波器组<br>HDF5的滤波器组能够对分块数组进行变换。最常用的变换是高保真压缩。使用一个特定的压缩滤波器创建dataset之后，读写都可以向平常一样，不必添加额外的步骤。<br>用关键词compression来指定压缩滤波器，而滤波器的可选参数使用关键词compression_opt来指定：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dset = f.create_dataset(&quot;zipped&quot;, (100, 100), compression=&quot;gzip&quot;)</span><br></pre></td></tr></table></figure>
+<ol>
+<li>HDF5文件的限制</li>
+</ol>
+<ul>
+<li>HDF5文件本身大小没有限制，但是HDF5的一个dataset最高允许32个维，每个维度最多可有2^64个值，每个值大小理论上可以任意大</li>
+<li>目前一个chunk允许的最大容量为2^32-1 byte (4GB). 大小固定的dataset的块的大小不能超过dataset的大小。</li>
+</ul>
+<p><a href="http://docs.h5py.org/en/latest/index.html" title="HDF5 for Python -- h5py 2.10.0 doc" target="_blank" rel="noopener">更多信息</a></p>
+<h4 id="pandas"><a href="#pandas" class="headerlink" title="pandas"></a>pandas</h4><p><strong> 写出 </strong></p>
+<p>　　pandas中的HDFStore()用于生成管理HDF5文件IO操作的对象，其主要参数如下：</p>
+<p>　　path：字符型输入，用于指定h5文件的名称（不在当前工作目录时需要带上完整路径信息）</p>
+<p>　　mode：用于指定IO操作的模式，与Python内建的open()中的参数一致，默认为’a’，即当指定文件已存在时不影响原有数据写入，指定文件不存在时则新建文件；’r’，只读模式；’w’，创建新文件（会覆盖同名旧文件）；’r+’，与’a’作用相似，但要求文件必须已经存在；</p>
+<p>　　complevel：int型，用于控制h5文件的压缩水平，取值范围在0-9之间，越大则文件的压缩程度越大，占用的空间越小，但相对应的在读取文件时需要付出更多解压缩的时间成本，默认为0，代表不压缩</p>
+<p>　　下面我们创建一个HDF5 IO对象store：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">store = pd.HDFStore(<span class="string">'demo.h5'</span>)</span><br><span class="line"><span class="string">'''查看store类型'''</span></span><br><span class="line">print(store)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">pandas</span>.<span class="title">io</span>.<span class="title">pytables</span>.<span class="title">HDFStore</span>'&gt;</span></span><br><span class="line"><span class="class"><span class="title">File</span> <span class="title">path</span>:</span> demo.h5</span><br></pre></td></tr></table></figure>
+<p>可以看到store对象属于pandas的io类，通过上面的语句我们已经成功的初始化名为demo.h5的的文件，本地也相应的出现了对应文件。</p>
+<p>接下来我们创建pandas中不同的两种对象，并将它们共同保存到store中，首先创建series对象：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建一个series对象</span></span><br><span class="line">s = pd.Series(np.random.randn(<span class="number">5</span>), index=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>])</span><br><span class="line"><span class="comment">#创建一个dataframe对象</span></span><br><span class="line">df = pd.DataFrame(np.random.randn(<span class="number">8</span>, <span class="number">3</span>),</span><br><span class="line">                 columns=[<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>])</span><br></pre></td></tr></table></figure>
+<p>第一种方式利用键值对将不同的数据存入store对象中，这里为了代码简洁使用了元组赋值法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">store[<span class="string">'s'</span>],store[<span class="string">'df'</span>] = s,df</span><br></pre></td></tr></table></figure>
+<p>第二种方式利用store对象的put()方法，其主要参数如下：</p>
+<p>　　key：指定h5文件中待写入数据的key</p>
+<p>　　value：指定与key对应的待写入的数据</p>
+<p>　　format：字符型输入，用于指定写出的模式，’fixed’对应的模式速度快，但是不支持追加也不支持检索；’table’对应的模式以表格的模式写出，速度稍慢，但是支持直接通过store对象进行追加和表格查询操作</p>
+<p>使用put()方法将数据存入store对象中：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">store.put(key=<span class="string">'s'</span>,value=s);store.put(key=<span class="string">'df'</span>,value=df)</span><br></pre></td></tr></table></figure></p>
+<p>既然是键值对的格式，那么可以查看store的items属性（注意这里store对象只有items和keys属性，没有values属性）：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">store.items</span><br></pre></td></tr></table></figure></p>
+<p>调用store对象中的数据直接用对应的键名来索引即可：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">store[<span class="string">'df'</span>]</span><br></pre></td></tr></table></figure></p>
+<p>删除store对象中指定数据的方法有两种，一是使用remove()方法，传入要删除数据对应的键：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">store.remove(<span class="string">'s'</span>)</span><br><span class="line">print(store.keys())</span><br></pre></td></tr></table></figure>
+<p>　　二是使用Python中的关键词del来删除指定数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">del</span> store[<span class="string">'s'</span>]</span><br><span class="line">print(store.keys())</span><br></pre></td></tr></table></figure>
+<p>这时若想将当前的store对象持久化到本地，只需要利用close()方法关闭store对象即可：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">store.close()</span><br><span class="line"><span class="string">'''查看store连接状况，False则代表已关闭'''</span></span><br><span class="line">store.is_open</span><br><span class="line"><span class="comment"># 这时本地的h5文件也相应的存储进store对象关闭前包含的文件</span></span><br></pre></td></tr></table></figure>
+<p>　除了通过定义一个确切的store对象的方式，还可以从pandas中的数据结构直接导出到本地h5文件中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建新的数据框</span></span><br><span class="line">df_ = pd.DataFrame(np.random.randn(<span class="number">5</span>,<span class="number">5</span>))</span><br><span class="line"><span class="comment">#导出到已存在的h5文件中，这里需要指定key</span></span><br><span class="line">df_.to_hdf(path_or_buf=<span class="string">'demo.h5'</span>,key=<span class="string">'df_'</span>)</span><br><span class="line"><span class="comment">#创建于本地demo.h5进行IO连接的store对象</span></span><br><span class="line">store = pd.HDFStore(<span class="string">'demo.h5'</span>)</span><br><span class="line"><span class="comment">#查看指定h5对象中的所有键</span></span><br><span class="line">print(store.keys())</span><br></pre></td></tr></table></figure>
+<p><strong>读入</strong><br>在pandas中读入HDF5文件的方式主要有两种，一是通过上一节中类似的方式创建与本地h5文件连接的IO对象，接着使用键索引或者store对象的get()方法传入要提取数据的key来读入指定数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">store = pd.HDFStore(<span class="string">'demo.h5'</span>)</span><br><span class="line"><span class="string">'''方式1'''</span></span><br><span class="line">df1 = store[<span class="string">'df'</span>]</span><br><span class="line"><span class="string">'''方式2'''</span></span><br><span class="line">df2 = store.get(<span class="string">'df'</span>)</span><br><span class="line">df1 == df2</span><br></pre></td></tr></table></figure>
+<p>可以看出这两种方式都能顺利读取键对应的数据。</p>
+<p>　　第二种读入h5格式文件中数据的方法是pandas中的read_hdf()，其主要参数如下：</p>
+<p>　　path_or_buf：传入指定h5文件的名称</p>
+<p>　　key：要提取数据的键</p>
+<p>　　需要注意的是利用read_hdf()读取h5文件时对应文件不可以同时存在其他未关闭的IO对象，否则会报错，如下例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(store.is_open)</span><br><span class="line">df = pd.read_hdf(<span class="string">'demo.h5'</span>,key=<span class="string">'df'</span>)</span><br></pre></td></tr></table></figure>
+<p>　把IO对象关闭后再次提取：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">store.close()</span><br><span class="line">print(store.is_open)</span><br><span class="line">df = pd.read_hdf(<span class="string">'demo.h5'</span>,key=<span class="string">'df'</span>)</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+<hr>
+<p>参考：<br><a href="https://blog.csdn.net/yudf2010/article/details/50353292" target="_blank" rel="noopener">https://blog.csdn.net/yudf2010/article/details/50353292</a><br><a href="https://segmentfault.com/a/119000001667088" target="_blank" rel="noopener">https://segmentfault.com/a/119000001667088</a><br><a href="https://www.cnblogs.com/feffery/p/11135082.html" target="_blank" rel="noopener">https://www.cnblogs.com/feffery/p/11135082.html</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+      <div>
+       
+       <div>
+    
+        <div style="text-align:center;color: black;font-size:24px;">-------------END<i class="fa fa-hand-paper-o" color:black"=""></i>THANKS-------------</div>
+    
+</div>
+
+       
+      </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/06/激活函数/" rel="next" title="激活函数">
+                <i class="fa fa-chevron-left"></i> 激活函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="X">
+            
+              <p class="site-author-name" itemprop="name">X</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#初次见面"><span class="nav-number">1.</span> <span class="nav-text">初次见面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初遇时的差池"><span class="nav-number">2.</span> <span class="nav-text">初遇时的差池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相识"><span class="nav-number">3.</span> <span class="nav-text">相识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#h5py"><span class="nav-number">3.0.1.</span> <span class="nav-text">h5py</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pandas"><span class="nav-number">3.0.2.</span> <span class="nav-text">pandas</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">X</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+<div class="powered-by">
+  <i class="fa fa-child" font="" style="font-size:26px;"></i>
+  <span id="busuanzi_container_site_uv">
+    本站访客数:<span id="busuanzi_value_site_uv"></span>
+  </span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {equationNumbers: { autoNumber: "AMS" }}
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
