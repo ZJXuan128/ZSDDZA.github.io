@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-02-29T15:21:35.958Z</updated>
+  <updated>2020-03-07T17:47:25.365Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>tensorflow1.0中conv2的细节</title>
+    <link href="http://yoursite.com/2020/03/08/tensorflow1-0%E4%B8%ADconv2%E7%9A%84%E7%BB%86%E8%8A%82/"/>
+    <id>http://yoursite.com/2020/03/08/tensorflow1-0中conv2的细节/</id>
+    <published>2020-03-07T17:46:44.000Z</published>
+    <updated>2020-03-07T17:47:25.365Z</updated>
+    
+    <content type="html"><![CDATA[<p>对比2.0可以知道tensorflow1.0对于网络的搭建更复杂一些，因此细节上的容易出现差错，在此总结一下使用conv2d的一些小问题。</p><hr><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tf.nn.conv2d（input, filter, strides, padding, use_cudnn_on_gpu=<span class="keyword">None</span>,</span><br><span class="line">                data_format=<span class="keyword">None</span>, name=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure><p>先来看一下各个参数的意义。</p><ul><li><strong>input</strong>：需要做卷积的输入数据。注意：这是一个4维的张量（[batch, in_height, in_width,in_channels]）。对于图像数据来说，batch是这一批样本的个数，in_height和in_width是图像的尺寸，in_channels是图像的通道数，而且要求图像的类型为float32或float64。因此，我们在对图像进行处理的时候，首先要把图像转换成这种特定的类型。</li><li><strong>filter</strong>：卷积核。这也是一个4维的张量（[filter_height, filter_width, in_channels,out_channels]）。filter_height,和filter_width是图像的尺寸，in_channels,是输入的通道数，out_channels是输出的通道数。</li><li><strong>strides</strong>：图像每一维的步长。是一个一维向量，长度为4。</li><li><strong>padding</strong>：定义元素边框与元素内容之间的空间。这里只能选择”SAME”或”VALID”，这个值决定了不同的卷积方式。当它为”SAME”时，表示边缘填充，适用于全尺寸操作；当它为”VALID”时，表示边缘不填充。</li><li><strong>use_cudnn_on_gpu</strong>：bool类型，是否使用cudnn加速。</li><li><strong>name</strong>：该操作的名称。</li><li><p>返回值：返回一个张量（tensor），即特征图（feature map）。</p><p>需要额外注意一点就是dataformat，关系到网络的output的排列方式，以及下一层的对接工作能否正确完成,它有两个选项，<strong>NHWC</strong>以及<strong>NCHW</strong>，前者为默认值。设置为 “NHWC” 时，排列顺序为 [batch, height, width, channels]。N是说这批图片有几张，H和W描述图像size，C是通道数（黑白图C=1，RBG图C=3）。以RGB为例，直观来说如下：<br><img src="https://img-blog.csdnimg.cn/20200308010449539.png" alt="在这里插入图片描述"><br>这里以灰度计算为例，说明各自的优劣。<br>对NCHW进行计算的时候，对将分成三个独立通道分别计算，，即全红一组，全绿一组这样。而NHWC得排列方式，是单个的三个相邻通道为一组计算。两者计算成本相同。我们可以知道，这样的话NHWC的局部访问存储性能更好（每三个输入像素即可得到一个输出像素）。NCHW 则必须等所有通道输入准备好才能得到最终输出结果，需要占用较大的临时空间。简单来说，就是想得到某个或某些独立像素像素的灰度计算结果，NCHW需要将全部图片计算出来，再取出特定的计算结果，而NHWC可以直接一个像素一个像素的得到结果。</p><p>在 CNN 中常常见到 1x1 卷积（例如：用于移动和嵌入式视觉应用的 MobileNets），也是每个输入 channel 乘一个权值，然后将所有 channel 结果累加得到一个输出 channel。如果使用 NHWC 数据格式，可以将卷积计算简化为矩阵乘计算，即 1x1 卷积核实现了每个输入像素组到每个输出像素组的线性变换。</p></li></ul><p>TensorFlow 为什么选择 NHWC 格式作为默认格式？因为早期开发都是基于 CPU，使用 NHWC 比 NCHW 稍快一些（不难理解，NHWC 局部性更好，cache 利用率高）。而NCHW 则是 Nvidia cuDNN 默认格式，使用 GPU 加速时用 NCHW 格式速度会更快（个别情况例外）。<br>所以设计网络的时候，需要根据具体的实践环境进行切换。</p><p><em>再回过头来看看conv2d的使用例子</em></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment"># 实践基于1.0</span></span><br><span class="line"> <span class="comment"># 2.0想实现请使用这段替换第一行：</span></span><br><span class="line"> <span class="comment"># import tensorflow.compat.v1 as tf</span></span><br><span class="line"> <span class="comment"># tf.disable_eager_execution()</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">input_data = tf.Varible(np.random.rand(<span class="number">10</span>,<span class="number">9</span>,<span class="number">9</span>,<span class="number">4</span>),dtype=np.float32)</span><br><span class="line">filter_data = tf.Varible(np.random.rand(<span class="number">3</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>),dtype=np.float32)</span><br><span class="line">y = tf.nn.conv2d(input_data,filter_data,strides=[<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>],padding=<span class="string">'VALID'</span>)</span><br><span class="line"></span><br><span class="line">print(input_data)</span><br><span class="line">print(y)</span><br></pre></td></tr></table></figure><blockquote><p>Tensor(“Variable/read:0”,shape=(10,9,9,4),dtype=float32)<br>Tensor(“Conv2D:0”,shape=(10,7,7,2),dtype=float32)</p></blockquote><p>导入所需要的库，然后我们定义需要做卷积的输入以及卷积核，这里的步长为1，padding为”VALID”。<br>我们可以看到，原本输入的shape是（10，9，9，4），由于padding为”VALID”,不对图像的边缘进行填充，所以在进行卷积之后，图像的尺寸发生了改变。<br>如果将padding改为”SAME”，图像的尺寸不变。</p><hr><p>2.0中keras的封装十分完善，对于使用来说比较友好，但是我们也更应该关注被封装一场隐藏起来的环节究竟有哪些细节在发生，在学习1.0的过程中我们会有不少收获。顺便<a href="https://minghuiwu.gitbook.io/tfbook/" target="_blank" rel="noopener">这里有一本1.0的开源书籍，对初学者十分友好，大家可以去看看</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;对比2.0可以知道tensorflow1.0对于网络的搭建更复杂一些，因此细节上的容易出现差错，在此总结一下使用conv2d的一些小问题。&lt;/p&gt;
+&lt;hr&gt;
+&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gut
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>keras.layers--核心网络层摘要</title>
