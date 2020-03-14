@@ -378,6 +378,187 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/14/tensorflow1-0-线性回归实战/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="X">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="X">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/03/14/tensorflow1-0-线性回归实战/" class="post-title-link" itemprop="url">tensorflow1.0 线性回归实战</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-14 23:49:56 / 修改时间：23:50:22" itemprop="dateCreated datePublished" datetime="2020-03-14T23:49:56+08:00">2020-03-14</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><em>一个简单的线性回归案例，是一簇点，很容易想到用一条直线去拟合它，所以我们也会希望机器能用y=w</em>x+b这条直线去对其进行拟合，也可以说是去让机器学习w和b的值。</p>
+<h2 id="损失"><a href="#损失" class="headerlink" title="损失"></a>损失</h2><p>损失是对糟糕预测的惩罚，损失是一个数值，表示对于单个样本而言模型预测的准确程度。<br>如果模型的预测完全准确，则损失为零，否则损失会较大。<br>训练模型的目标是从所有样本中找到一组平均损失“较小”的权重（w）和偏差（b）。</p>
+<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>损失函数也称为代价函数是将随机事件或其有关随机变量的取值映射为非负实数以表示该随机事件的“风险”或“损失”的函数。<br>下面介绍三个比较常见的损失函数：</p>
+<blockquote>
+<p>L1损失<br>L1范数损失函数，也被称为最小绝对值偏差（LAD），最小绝对值误差（LAE）。总的说来，它是把目标值（Yi）与估计值（f(xi)）的绝对差值的总和（S）最小化：$S=\sum_{i=1}^n|Y_i-f(x_i)|$</p>
+<p>L2范数损失函数，也被称为最小平方误差（LSE）。总的来说，它是把目标值（Yi）与估计值（f(xi)）的差值的平方和（S）最小化：<br>$S=\sum_{i=1}^n(Y_i-f(x_i))^2$</p>
+<p>均方误差 (MSE)<br>均方误差 (MSE) 指的是每个样本的平均平方损失<br>$MSE=\frac{1}{N}\sum_{(x,y)\in D}(y-prediction(x))^2$</p>
+</blockquote>
+<h2 id="模型训练与降低损失"><a href="#模型训练与降低损失" class="headerlink" title="模型训练与降低损失"></a>模型训练与降低损失</h2><p>迭代:首先我们先对模型的中的权重w和偏差b进行猜测，然后将特征点输入，执行预测和推理（Inference），将计算出的值和该样本的标签值进行对比，计算出损失值，我们的目标是使推理的值和标签值的差距越小越好，也就是损失的值越小越好，所以需要不断对计算参数进行更新，直到损失值尽可能地最低为止。</p>
+<p>收敛:在学习优化过程中，机器学习系统将根据所有标签去重新评估所有特征，为损失函数生成一个新值，而该值又产生新的参数值。通常，可以不断迭代，直到总体损失不再变化或至少变化极其缓慢为止。这时候，我们可以说该模型已收敛。<br><em>易知该线性回归问题产生的损失与权重的关系图为如下图</em><br><img src="https://img-blog.csdnimg.cn/20200314233427520.png" alt=""></p>
+<h2 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h2><p>梯度下降法的基本思想可以类比为一个下山的过程，假设一个人在山上，此时他要以最快的速度下山，就需要梯度下降来帮助自己下山。具体来说，就是以自己现在所处的位置为基准，寻找一个山势最陡峭的方向，沿着高度下降的方向走，就能以最快速度到山底。</p>
+<p>同理，将上一节所提到的损失函数看作一座山，我们的目标就是找到这个损失函数的最小值（山底），那么我们就可以在初始点找到该点函数的梯度，沿着函数值下降的方向对参数进行更新，这就是梯度下降法。</p>
+<h2 id="学习率"><a href="#学习率" class="headerlink" title="学习率"></a>学习率</h2><p>那么沿着负梯度方向进行下一步探索，前进多少才合适呢？这时我们就要引入学习率的概念了。用梯度乘以一个称为学习率（有时也称为步长）的标量，以确定下一个点的位置。例如：如果梯度大小为 2.5，学习速率为 0.01，则梯度下降法算法会选择距离前一个点 0.025 的位置作为下一个点。</p>
+<p>所以学习率是指导我们该如何通过损失函数的梯度调整网络权重的一个参数（也成为超参数）。学习率越低，损失函数的变化速度就越慢。</p>
+<h2 id="Tensorflow实战"><a href="#Tensorflow实战" class="headerlink" title="Tensorflow实战"></a>Tensorflow实战</h2><p>本例通过生成人工数据集。随机生成一个近似采样随机分布，使得w=2.0, b=1, 并加入一个噪声，噪声的最大振幅为0.4。</p>
+<p>下面我们来展示具体代码，假设我们要学习的函数为线性函数 𝑦=2𝑥+1。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#在Jupyter中，使用matplotlib显示图像需要设置为 inline 模式，否则不会现实图像</span></span><br><span class="line">%matplotlib inline</span><br><span class="line">​</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt <span class="comment"># 载入matplotlib</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np <span class="comment"># 载入numpy</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf <span class="comment"># 载入Tensorflow</span></span><br><span class="line">​</span><br><span class="line">np.random.seed(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<p>我们需要构造满足这个函数的 𝑥 和 𝑦 同时加入一些不满足方程的噪声。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#直接采用np生成等差数列的方法，生成100个点，每个点的取值在-1~1之间</span></span><br><span class="line">x_data = np.linspace(<span class="number">-1</span>, <span class="number">1</span>, <span class="number">100</span>) </span><br><span class="line"><span class="comment"># y = 2x +1 + 噪声， 其中，噪声的维度与x_data一致</span></span><br><span class="line">y_data = <span class="number">2</span> * x_data + <span class="number">1.0</span> + np.random.randn(*x_data.shape) * <span class="number">0.4</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#画出随机生成数据的散点图</span></span><br><span class="line">plt.scatter(x_data, y_data) </span><br><span class="line"><span class="comment"># 画出我们想要学习到的线性函数 y = 2x +1</span></span><br><span class="line">plt.plot (x_data, <span class="number">2</span> * x_data + <span class="number">1.0</span>, color = <span class="string">'red'</span>,linewidth=<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p>上面的代码产生了随机的-1到1的100个点，我们使用matplotlib库将这些点和要学习得到的线性函数可视化出来。</p>
+<p>首先我们定义训练数据的占位符，这是后面数据输入的入口，x是特征值，y是标签值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义训练数据的占位符，x是特征值，y是标签值</span></span><br><span class="line">​</span><br><span class="line">x = tf.placeholder(<span class="string">"float"</span>, name = <span class="string">"x"</span>) </span><br><span class="line">y = tf.placeholder(<span class="string">"float"</span>, name = <span class="string">"y"</span>)</span><br></pre></td></tr></table></figure>
+<p>然后我们定义模型函数，在本例中是个简单的线性函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">model</span><span class="params">(x, w, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tf.multiply(x, w) + b</span><br></pre></td></tr></table></figure>
+<p>接下来我们创建模型的变量，Tensorflow变量的声明函数是tf.Variable，tf.Variable的作用是保存和更新参数，变量的初始值可以是随机数、常数或是通过其他变量的初始值计算得到。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 构建线性函数的斜率，变量w</span></span><br><span class="line">w = tf.Variable(<span class="number">1.0</span>, name=<span class="string">"w0"</span>)</span><br><span class="line">​</span><br><span class="line"><span class="comment"># 构建线性函数的截距，变量b</span></span><br><span class="line">b = tf.Variable(<span class="number">0.0</span>, name=<span class="string">"b0"</span>)   </span><br><span class="line">​</span><br><span class="line"><span class="comment"># pred是预测值，前向计算</span></span><br><span class="line">pred = model(x, w, b)</span><br></pre></td></tr></table></figure>
+<p>定义一些超参数，包括训练的轮数和学习率。其中如果学习率设置过大，可能导致参数在极值附近来回摇摆，无法保证收敛。如果学习率设置过小，虽然能保证收敛，但优化速度会大大降低，我们需要更多迭代次数才能达到较理想的优化效果。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 迭代次数（训练轮数）</span></span><br><span class="line">train_epochs = <span class="number">10</span></span><br><span class="line">​</span><br><span class="line"><span class="comment"># 学习率</span></span><br><span class="line">learning_rate = <span class="number">0.05</span> </span><br><span class="line">​</span><br><span class="line"><span class="comment"># 控制显示loss值的粒度</span></span><br><span class="line">display_step = <span class="number">10</span></span><br></pre></td></tr></table></figure>
+<p>定义损失函数和优化器。损失函数用于描述预测值与真实值之间的误差，从而指导模型收敛方向。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 采用均方差作为损失函数</span></span><br><span class="line">loss_function = tf.reduce_mean(tf.square(y-pred))  </span><br><span class="line">​</span><br><span class="line"><span class="comment"># 梯度下降优化器</span></span><br><span class="line">optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss_function)</span><br></pre></td></tr></table></figure>
+<p>声明会话及初始化。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sess = tf.Session()</span><br><span class="line">​</span><br><span class="line">init = tf.global_variables_initializer()</span><br><span class="line">​</span><br><span class="line">sess.run(init)</span><br></pre></td></tr></table></figure></p>
+<p>模型训练阶段，设置迭代轮次，每次通过将样本逐个输入模型，进行梯度下降优化操作，每轮迭代后，绘制出模型曲线。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开始训练，轮数为 epoch，采用SGD随机梯度下降优化方法</span></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> range(train_epochs):</span><br><span class="line">    <span class="keyword">for</span> xs,ys <span class="keyword">in</span> zip(x_data, y_data):</span><br><span class="line">        _, loss=sess.run([optimizer,loss_function], feed_dict=&#123;x: xs, y: ys&#125;) </span><br><span class="line">                </span><br><span class="line">    b0temp=b.eval(session=sess)</span><br><span class="line">    w0temp=w.eval(session=sess)</span><br><span class="line">    plt.plot (x_data, w0temp * x_data + b0temp  )<span class="comment"># 画图</span></span><br></pre></td></tr></table></figure>
+<p>从上图可以看出，本案例所拟合的模型较简单，训练3次之后已经接近收敛 对于复杂模型，需要更多次训练才能收敛。</p>
+<p>预测：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">x_test = <span class="number">3.21</span></span><br><span class="line">​</span><br><span class="line">predict = sess.run(pred, feed_dict=&#123;x: x_test&#125;)</span><br><span class="line">print(<span class="string">"预测值：%f"</span> % predict)</span><br><span class="line">​</span><br><span class="line">target = <span class="number">2</span> * x_test + <span class="number">1.0</span></span><br><span class="line">print(<span class="string">"目标值：%f"</span> % target)</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+      <div>
+       
+      </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/08/tensorflow1-0中conv2的细节/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2134,158 +2315,6 @@ Nothing's so hard,but search will find it out.</font></p>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/19/浮点的限制与争议/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="X">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="X">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/19/浮点的限制与争议/" class="post-title-link" itemprop="url">浮点的限制与争议</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-05-19 12:22:38 / 修改时间：13:21:25" itemprop="dateCreated datePublished" datetime="2019-05-19T12:22:38+08:00">2019-05-19</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>浮点算术在计算机领域的广泛应用不必多说。应该大多数人都有这样的经历，总是在不经意间会遇到浮点运算的一些不满足预期的奇怪输出。这里主要来探讨一下个中奥秘。<br>首先，我们都明白，大多数十进制小数都不能精确地表示为二进制小数，这导致在大多数情况下，你输入的十进制浮点数都只能近似地以二进制浮点数形式储存在计算机中。用十进制来理解这个问题显得更加容易一些。考虑分数$1/3$。我们可以得到它在十进制下的一个近似值$0.3$，或者更接近$0.33$，或者更接近的$0.333……$无论你写下多少，永远只能更接近。同样，我们用$2$作为基数，$0.1$是永远也无法精确表示为二进制的小数。在二进制下，$1/10$是一个无限循环小数$0.0001100110011001100110011001100110011001100110011…$在任何一个位置停下都仅仅只是近似值。因此，在今天的大部分架构上，浮点数都只能近似地使用二进制小数表示，对应分数的分子使用每8字节的前53位表示，分母则表示为$2$的幂次(IEEE754)。在$1/10$这个例子中，相应的二进制分数是 $3602879701896397/2^{55}$ ，它很接近$1/10$，但并不是$1/10$。往往我们能观察到的输出结果精度达不到近似值有差异的地方。记住了，即使输出的结果看起来好像就是$1/10$的精确值，实际储存的值只是最接近$1/10$的计算机可表示的二进制分数。有趣的是，有许多不同的十进制数共享相同的最接近的近似二进制小数。例如，$0.1$、$0.10000000000000001$、$0.1000000000000000055511151231257827021181583404541015625$全都近似于$3602879701896397/2^{55}$。由于所有这些十进制值都具有相同的近似值，因此可以显示其中任何一个。<br>出现浮点运算不符合预期值的情况，其本质不是语言的限制，也不是代码的问题，你在所有支持在硬件中浮点运算的语言都会发现相同的情况。<br>有时我们想要更美观的输出，我们可以对小数进行格式化输出，但其实这并不影响浮点数在计算机里的存储值，只是见舍入后的结果进行显示而已。我们用Python举例。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; format(math.pi,&apos;.12g&apos;)</span><br><span class="line">&apos;3.14159265359&apos;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; format(math.pi,&apos;.2f&apos;)</span><br><span class="line">&apos;3.14&apos;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; format(math.pi)</span><br><span class="line">&apos;3.141592653589793&apos;</span><br></pre></td></tr></table></figure></p>
-<p>我们看到的输出结果只是表象而已，不理解内部的运算会在应用过程中产生很多问题。比如下面的例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; .1+.1+.1==.3</span><br><span class="line">Flase</span><br></pre></td></tr></table></figure></p>
-<p>我们无法将$2$为基数的$0.1$精确到十进制的$1/10$，对应的$0.3$同样无法精确。哪怕我们使用Python的$round()$函数预先舍入也无济于事。不过预后舍入就可以达到我们想要的效果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; round(.1,1)+round(.1,1)+round(.1,1)==round(.3,1)</span><br><span class="line">False</span><br><span class="line">&gt;&gt;&gt;round(.1+.1+.1,10)==round(.3,10)</span><br><span class="line">True</span><br></pre></td></tr></table></figure></p>
-<p>浮点数运算会造成许多这样的“意外”。不过大多数情况下一点误差是可以容忍的。需要注意的是，每次浮点运算都可能导致新的舍入错误。<br>对于需要精确十进制表示的使用场景，请尝试使用$decimal$模块，该模块实现了适合会计应用和高精度应用的十进制运算。<br>另一种形式的精确运算由$fractions$模块提供支持，该模块实现了基于有理数的算术运算（因此可以精确表示像$1/3$这样的数值）。<br>如果你是浮点运算的重度用户，你应该看一下数值运算Python包NumPy以及由SciPy项目所提供的许多其它数学和统计运算包。参见<a href="https://scipy.org" target="_blank" rel="noopener">https://scipy.org</a>。<br>Python也提供了一些工具，可以在你真的想要知道一个浮点数精确值的少数情况下提供帮助。例如float.as_integer_ratio()方法会将浮点数表示为一个分数:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; x=3.14159</span><br><span class="line">&gt;&gt;&gt; x.as_integer_ratio()</span><br><span class="line">(3537115888337719, 1125899906842624)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; x==3537115888337719/1125899906842624</span><br><span class="line">True</span><br></pre></td></tr></table></figure></p>
-<p>这样的表示法是精确的，可以跨版本移植，和别的标准相同的语言（Java、C99）交换数据。</p>
-<hr>
-<p>这里引出问题所在和基本的解决措施。下一篇将深入本质探讨此问题，包括IEEE754的相关具体细节。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-      <div>
-       
-      </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2335,7 +2364,7 @@ Nothing's so hard,but search will find it out.</font></p>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

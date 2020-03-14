@@ -378,6 +378,158 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/19/浮点的限制与争议/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="X">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="X">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/19/浮点的限制与争议/" class="post-title-link" itemprop="url">浮点的限制与争议</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-19 12:22:38 / 修改时间：13:21:25" itemprop="dateCreated datePublished" datetime="2019-05-19T12:22:38+08:00">2019-05-19</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>浮点算术在计算机领域的广泛应用不必多说。应该大多数人都有这样的经历，总是在不经意间会遇到浮点运算的一些不满足预期的奇怪输出。这里主要来探讨一下个中奥秘。<br>首先，我们都明白，大多数十进制小数都不能精确地表示为二进制小数，这导致在大多数情况下，你输入的十进制浮点数都只能近似地以二进制浮点数形式储存在计算机中。用十进制来理解这个问题显得更加容易一些。考虑分数$1/3$。我们可以得到它在十进制下的一个近似值$0.3$，或者更接近$0.33$，或者更接近的$0.333……$无论你写下多少，永远只能更接近。同样，我们用$2$作为基数，$0.1$是永远也无法精确表示为二进制的小数。在二进制下，$1/10$是一个无限循环小数$0.0001100110011001100110011001100110011001100110011…$在任何一个位置停下都仅仅只是近似值。因此，在今天的大部分架构上，浮点数都只能近似地使用二进制小数表示，对应分数的分子使用每8字节的前53位表示，分母则表示为$2$的幂次(IEEE754)。在$1/10$这个例子中，相应的二进制分数是 $3602879701896397/2^{55}$ ，它很接近$1/10$，但并不是$1/10$。往往我们能观察到的输出结果精度达不到近似值有差异的地方。记住了，即使输出的结果看起来好像就是$1/10$的精确值，实际储存的值只是最接近$1/10$的计算机可表示的二进制分数。有趣的是，有许多不同的十进制数共享相同的最接近的近似二进制小数。例如，$0.1$、$0.10000000000000001$、$0.1000000000000000055511151231257827021181583404541015625$全都近似于$3602879701896397/2^{55}$。由于所有这些十进制值都具有相同的近似值，因此可以显示其中任何一个。<br>出现浮点运算不符合预期值的情况，其本质不是语言的限制，也不是代码的问题，你在所有支持在硬件中浮点运算的语言都会发现相同的情况。<br>有时我们想要更美观的输出，我们可以对小数进行格式化输出，但其实这并不影响浮点数在计算机里的存储值，只是见舍入后的结果进行显示而已。我们用Python举例。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; format(math.pi,&apos;.12g&apos;)</span><br><span class="line">&apos;3.14159265359&apos;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; format(math.pi,&apos;.2f&apos;)</span><br><span class="line">&apos;3.14&apos;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; format(math.pi)</span><br><span class="line">&apos;3.141592653589793&apos;</span><br></pre></td></tr></table></figure></p>
+<p>我们看到的输出结果只是表象而已，不理解内部的运算会在应用过程中产生很多问题。比如下面的例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; .1+.1+.1==.3</span><br><span class="line">Flase</span><br></pre></td></tr></table></figure></p>
+<p>我们无法将$2$为基数的$0.1$精确到十进制的$1/10$，对应的$0.3$同样无法精确。哪怕我们使用Python的$round()$函数预先舍入也无济于事。不过预后舍入就可以达到我们想要的效果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; round(.1,1)+round(.1,1)+round(.1,1)==round(.3,1)</span><br><span class="line">False</span><br><span class="line">&gt;&gt;&gt;round(.1+.1+.1,10)==round(.3,10)</span><br><span class="line">True</span><br></pre></td></tr></table></figure></p>
+<p>浮点数运算会造成许多这样的“意外”。不过大多数情况下一点误差是可以容忍的。需要注意的是，每次浮点运算都可能导致新的舍入错误。<br>对于需要精确十进制表示的使用场景，请尝试使用$decimal$模块，该模块实现了适合会计应用和高精度应用的十进制运算。<br>另一种形式的精确运算由$fractions$模块提供支持，该模块实现了基于有理数的算术运算（因此可以精确表示像$1/3$这样的数值）。<br>如果你是浮点运算的重度用户，你应该看一下数值运算Python包NumPy以及由SciPy项目所提供的许多其它数学和统计运算包。参见<a href="https://scipy.org" target="_blank" rel="noopener">https://scipy.org</a>。<br>Python也提供了一些工具，可以在你真的想要知道一个浮点数精确值的少数情况下提供帮助。例如float.as_integer_ratio()方法会将浮点数表示为一个分数:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; x=3.14159</span><br><span class="line">&gt;&gt;&gt; x.as_integer_ratio()</span><br><span class="line">(3537115888337719, 1125899906842624)</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; x==3537115888337719/1125899906842624</span><br><span class="line">True</span><br></pre></td></tr></table></figure></p>
+<p>这样的表示法是精确的，可以跨版本移植，和别的标准相同的语言（Java、C99）交换数据。</p>
+<hr>
+<p>这里引出问题所在和基本的解决措施。下一篇将深入本质探讨此问题，包括IEEE754的相关具体细节。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+      <div>
+       
+      </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/10/算法题：爬楼梯/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1135,7 +1287,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-count">15</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1350,6 +1502,8 @@
 
   
   
+    
+      
     
       
     
