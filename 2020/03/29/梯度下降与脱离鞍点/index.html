@@ -96,19 +96,21 @@
 
 
 
-  <meta name="description" content="以下为本博客创建时所遇到的一些疑难问题与所关注过的注意事项，对其有详细解答。中途还会介绍涉及到的部分零碎知识。如有描述不准，望海涵斧正。(参考的安装教程) 一、Node.js &amp;amp; Github环境搭建①、下载安装时避免将两个环境置入同一个文件夹②、创建Github项目时以“账户名.github.io”为格式———————-进入正题———————-这里出现问题比较多，需要重点关注 二、安装h">
+  <meta name="description" content="直奔主题如果要优化(找到它的最小值)一个函数$f(x)$ , 通常能够用Gradient Descent (GD), 也就是梯度下降，也称最速下降，因为梯度的本意是一个向量（矢量），表示某一函数在该点处的方向导数沿着该方向取得最大值，即函数在该点处沿着该方向（此梯度的方向）变化最快，变化率最大（为该梯度的模）。听着很简单就是每次沿着当前位置的导数方向走一小步, 走啊走啊就能够走到一个最小值点。如图">
 <meta property="og:type" content="article">
-<meta property="og:title" content="博客创建问题及解决摘要">
-<meta property="og:url" content="http://yoursite.com/2019/01/02/博客创建问题及解决摘要/index.html">
+<meta property="og:title" content="梯度下降与脱离鞍点">
+<meta property="og:url" content="http://yoursite.com/2020/03/29/梯度下降与脱离鞍点/index.html">
 <meta property="og:site_name" content="X">
-<meta property="og:description" content="以下为本博客创建时所遇到的一些疑难问题与所关注过的注意事项，对其有详细解答。中途还会介绍涉及到的部分零碎知识。如有描述不准，望海涵斧正。(参考的安装教程) 一、Node.js &amp;amp; Github环境搭建①、下载安装时避免将两个环境置入同一个文件夹②、创建Github项目时以“账户名.github.io”为格式———————-进入正题———————-这里出现问题比较多，需要重点关注 二、安装h">
+<meta property="og:description" content="直奔主题如果要优化(找到它的最小值)一个函数$f(x)$ , 通常能够用Gradient Descent (GD), 也就是梯度下降，也称最速下降，因为梯度的本意是一个向量（矢量），表示某一函数在该点处的方向导数沿着该方向取得最大值，即函数在该点处沿着该方向（此梯度的方向）变化最快，变化率最大（为该梯度的模）。听着很简单就是每次沿着当前位置的导数方向走一小步, 走啊走啊就能够走到一个最小值点。如图">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2019/01/02/images/error.jpg">
-<meta property="og:updated_time" content="2020-02-12T08:44:44.295Z">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200328214122985.jpg">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200329001122896.jpg">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200329001151684.jpg">
+<meta property="og:updated_time" content="2020-03-28T16:48:38.128Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="博客创建问题及解决摘要">
-<meta name="twitter:description" content="以下为本博客创建时所遇到的一些疑难问题与所关注过的注意事项，对其有详细解答。中途还会介绍涉及到的部分零碎知识。如有描述不准，望海涵斧正。(参考的安装教程) 一、Node.js &amp;amp; Github环境搭建①、下载安装时避免将两个环境置入同一个文件夹②、创建Github项目时以“账户名.github.io”为格式———————-进入正题———————-这里出现问题比较多，需要重点关注 二、安装h">
-<meta name="twitter:image" content="http://yoursite.com/2019/01/02/images/error.jpg">
+<meta name="twitter:title" content="梯度下降与脱离鞍点">
+<meta name="twitter:description" content="直奔主题如果要优化(找到它的最小值)一个函数$f(x)$ , 通常能够用Gradient Descent (GD), 也就是梯度下降，也称最速下降，因为梯度的本意是一个向量（矢量），表示某一函数在该点处的方向导数沿着该方向取得最大值，即函数在该点处沿着该方向（此梯度的方向）变化最快，变化率最大（为该梯度的模）。听着很简单就是每次沿着当前位置的导数方向走一小步, 走啊走啊就能够走到一个最小值点。如图">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200328214122985.jpg">
 
 
 
@@ -117,7 +119,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/02/博客创建问题及解决摘要/">
+  <link rel="canonical" href="http://yoursite.com/2020/03/29/梯度下降与脱离鞍点/">
 
 
 
@@ -127,7 +129,7 @@
   };
 </script>
 
-  <title>博客创建问题及解决摘要 | X</title>
+  <title>梯度下降与脱离鞍点 | X</title>
   
 
 
@@ -383,7 +385,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/02/博客创建问题及解决摘要/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/29/梯度下降与脱离鞍点/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="X">
@@ -400,7 +402,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">博客创建问题及解决摘要
+          <h1 class="post-title" itemprop="name headline">梯度下降与脱离鞍点
 
               
             
@@ -426,24 +428,12 @@
                 
               
 
-              <time title="创建时间：2019-01-02 22:56:41" itemprop="dateCreated datePublished" datetime="2019-01-02T22:56:41+08:00">2019-01-02</time>
+              <time title="创建时间：2020-03-29 00:48:13 / 修改时间：00:48:38" itemprop="dateCreated datePublished" datetime="2020-03-29T00:48:13+08:00">2020-03-29</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-02-12 16:44:44" itemprop="dateModified" datetime="2020-02-12T16:44:44+08:00">2020-02-12</time>
               
             
           </span>
@@ -476,20 +466,43 @@
       
 
       
-        <p>以下为本博客创建时所遇到的一些疑难问题与所关注过的注意事项，对其有详细解答。中途还会介绍涉及到的部分零碎知识。如有描述不准，望海涵斧正。<a href="https://www.cnblogs.com/fengxiongZz/p/7707219.html" target="_blank" rel="noopener">(参考的安装教程)</a></p>
-<h1 id="一、Node-js-amp-Github环境搭建"><a href="#一、Node-js-amp-Github环境搭建" class="headerlink" title="一、Node.js &amp; Github环境搭建"></a>一、Node.js &amp; Github环境搭建</h1><h5 id="①、下载安装时避免将两个环境置入同一个文件夹"><a href="#①、下载安装时避免将两个环境置入同一个文件夹" class="headerlink" title="①、下载安装时避免将两个环境置入同一个文件夹"></a>①、下载安装时避免将两个环境置入同一个文件夹</h5><h5 id="②、创建Github项目时以“账户名-github-io”为格式"><a href="#②、创建Github项目时以“账户名-github-io”为格式" class="headerlink" title="②、创建Github项目时以“账户名.github.io”为格式"></a>②、创建Github项目时以“账户名.github.io”为格式</h5><h2 id="———————-进入正题———————"><a href="#———————-进入正题———————" class="headerlink" title="———————-进入正题———————-"></a>———————-<em>进入正题</em>———————-</h2><p><del>这里出现问题比较多，需要重点关注</del></p>
-<h1 id="二、安装hexo"><a href="#二、安装hexo" class="headerlink" title="二、安装hexo"></a>二、<strong>安装hexo</strong></h1><h3 id="1、使用npm安装Github"><a href="#1、使用npm安装Github" class="headerlink" title="1、使用npm安装Github"></a>1、使用npm安装Github</h3><p><strong><em>问题Ⅰ：</em></strong>首次用npm安装Github时，一段进度条会一直无法“前进”，安装进度停滞不前。<br><strong>剖析：</strong>首先，简单介绍一下npm。</p>
-<blockquote>
-<p>npm是随同NodeJS一起安装的包(package)管理工具，能解决NodeJS代码部署上的很多问题。<br>它由三个独立的部分组成：</p>
+        <h4 id="直奔主题"><a href="#直奔主题" class="headerlink" title="直奔主题"></a>直奔主题</h4><p>如果要优化(找到它的最小值)一个函数$f(x)$ , 通常能够用Gradient Descent (GD), 也就是梯度下降，也称最速下降，因为梯度的本意是一个向量（矢量），表示某一函数在该点处的方向导数沿着该方向取得最大值，即函数在该点处沿着该方向（此梯度的方向）变化最快，变化率最大（为该梯度的模）。<br>听着很简单就是每次沿着当前位置的导数方向走一小步, 走啊走啊就能够走到一个最小值点。<br>如图：<br><img src="https://img-blog.csdnimg.cn/20200328214122985.jpg" alt="在这里插入图片描述"></p>
+<p>对应的数学语言：$x_{t+1}=x_t+γ_t\nabla f(x_t)$<br>$x_t$为第t步的位置，$γ_t$为第t步的步长，$\nabla f(x_t)$为梯度求导得到，nabla算子也可以写作$grad()$，具体可以这样表示$\nabla=\frac{\partial }{\partial x}\pmb i+\frac{\partial }{\partial y}\pmb j$。</p>
+<p>在机器学习的中使用, 会面临非常大的数据集。这个时候如果硬要算$f(x)$的精确导数, 往往意味着我们要花几个小时把整个数据集都扫描一遍, 然后还只能走一小步。一般GD要几千步几万步才能收敛, 所以这样就根本跑不完了。其次, 我们可能就会不小心陷入了鞍点, 或者比较差的局部最优点。<br>局部最优解与鞍点：<br><img src="https://img-blog.csdnimg.cn/20200329001122896.jpg" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200329001151684.jpg" alt="在这里插入图片描述"><br>Stochastic Gradient Descent (SGD) 算法而可以将将两个问题一并解决，<br>数学语言描述的形式：$x_{t+1}=x_t+γ_tg_t$<br>$g_t$就是随机梯度，满足约束：$E(g_t)= \nabla f(x_t)$<br>就是说虽然包含一定的随机性，但是从期望上来看，它是等于正确的导数的。其实SGD需要更多步才能够收敛的。由于它对导数的要求非常低，可以包含大量的噪声（或者说扰动），只要期望正确就行，所以导数算起来非常快。拿机器学习的例子来说，比如神经网络吧，训练的时候都是每次只从百万数据点里面拿128或者256个数据点，算一个不那么准的导数，然后用SGD走一步的。想想看，这样每次算的时间就快了10000倍，就算是多走几倍的路，算算也是挺值的了。</p>
+<p>所以它可以完美解决GD的第一个问题——算得慢．这也是当初人们使用SGD的主要目的。而且，大家并不用担心导数中包含的噪声会有什么负面影响。有大量的理论工作说明，只要噪声不离谱，其实（至少在f是凸函数的情况下），SGD都能够很好地收敛。<br>再来说一下脱离鞍点的问题，导数为零的点叫Stationary points，即驻点。<br>可以是（局部）最小值，（局部）最大值，也可以是鞍点。<br>我们可以通过计算它的Hessian矩阵H来判断。</p>
 <ul>
-<li>网站</li>
-<li>注册表(registry)</li>
-<li>命令行工具(CLI)<br>由于众所周知的原因，国内访问外国网站时一直不怎么流畅，就此问题而言，比起搭梯子，一个淘宝镜像来的更方便快捷。:D<br>那么接下来就是讲一下镜像了。<br>镜像是冗余的一种类型，一个磁盘上的数据在另一个磁盘上存在一个完全相同的副本即为镜像。<br>根据这个描述，可以知道这个淘宝NPM镜像（可以从网络轻松获得，复制停滞进度条前的代码百度即可）是用来替代官方版本的完整镜像，可以完美解决此问题。<br>附上镜像：<code>npm config set registry https://registry.npm.taobao.org</code>  （退出原有的控制台，再次进入安装hexo的文件夹中，直接在命令行中输入即可）<h3 id="2、关联hexo和Github-page"><a href="#2、关联hexo和Github-page" class="headerlink" title="2、关联hexo和Github page"></a>2、关联hexo和Github page</h3><strong><em>问题Ⅱ：</em></strong><font color="#9932CC"> .ssh </font>文件夹及涉及问题<br><strong>具体描述及解决措施：</strong></li>
-<li>①描述：在Git Bash的命令框中输入<code>cd ~/.ssh</code>时，反馈没有此文件夹。<br>解决方案：正常现象，可以继续教程的下一步，系统会自动创建.ssh文件夹。<br>即输入<code>ssh-keygen -t rsa -C “your email address”</code> <font color="#DC143C">(所有指令中注意空格不可略、不可多)</font><br>然后就没什么多说的了，回车就完事了。这时<font color="#9932CC"> .ssh </font>文件夹中会出现两个文件，一个是公钥一个是私钥。这就牵扯到密码学的RSA加密算法<del>在前面输入指令中出现过</del>。简单来说公钥是可公开信息，而私钥是你自己保管。通过一系列算法保证信息安全性。因为对极大整数做因数分解的难度决定了RSA算法的可靠性（不是简单入门的素数判断哦）穷举可破解，但时间得不偿失😊。</li>
-<li>②描述：在hexo文件夹中，找到_config.yml文件并修改时需要注意的事项。<br>  第一这类文件对格式要求即为严格，<font color="#DC143C"> 每个冒号后必须要使用一个空格 </font>，对它的修改在后来配置自己博客时经常出现，所以需要牢记。不然本地检测会报错。<br><img src="..\images\error.jpg" alt="错误实例" title="从朋友那爬了一张图"><br>  第二修改时会有一项<code>repository:</code>     注意使用的是github上项目的SSH不是HTTP！不是HTTP！<del>没有第三遍</del></li>
+<li>如果H是负定的，说明所有的特征值都是负的．这个时候，你无论往什么方向走，导数都会变负，也就是说函数值会下降．所以，这是（局部）最大值．</li>
+<li>如果H是正定的，说明所有的特征值都是正的．这个时候，你无论往什么方向走，导数都会变正，也就是说函数值会上升．所以，这是（局部）最小值．</li>
+<li>如果Ｈ既包含正的特征值，又包含负的特征值，那么这个稳定点就是一个鞍点．具体参照之前的图片．也就是说有些方向函数值会上升，有些方向函数值会下降．</li>
+<li>虽然看起来上面已经包含了所有的情况，但是其实不是的！还有一个非常重要的情况就是H可能包含特征值为０的情况．这种情况下面，我们无法判断稳定点到底属于哪一类，往往需要参照更高维的导数才行．想想看，如果特征值是０，就说明有些方向一马平川一望无际，函数值一直不变，那我们当然不知道是怎么回事了：）<br>今天讨论的情况只包含前三种，不包含第四种．第四种被称为退化了的情况，所以我们考虑的情况就叫做非退化情况。</li>
 </ul>
+<p>在这种非退化的情况下面，我们考虑一个重要的类别，即strict saddle函数．这种函数有这样的特点：对于每个点x</p>
+<ul>
+<li>要么x的导数比较大 </li>
+<li>要么x的Hessian矩阵包含一个负的特征值 </li>
+<li>要么x已经离某一个（局部）最小值很近了</li>
+</ul>
+<p>为什么我们要x满足这三个情况的至少一个呢？因为如果x的导数大，那么沿着这个导数一定可以大大降低函数值（我们对函数有光滑性假设）<br>如果x的Hessian矩阵有一个负的特征值，那么我们通过加噪声随机扰动，跑跑就能够跑到这个方向上，沿着这个方向就能够像滑滑梯一样一路滑下去，大大降低函数值<br>如果x已经离某一个（局部）最小值很近了，那么我们就完成任务了，毕竟这个世界上没有十全十美的事情，离得近和精确跑到这个点也没什么区别．<br>所以说，如果我们考虑的函数满足这个strict saddle性质，那么SGD算法其实是不会被困在鞍点的。那么strict saddle性质是不是一个合理的性质呢？</p>
+<p>实际上，有大量的机器学习的问题使用的函数都满足这样的性质。比如Orthogonal tensor decomposition，dictionary learning, matrix completion等等。而且，其实并不用担心最后得到的点只是一个局部最优，而不是全局最优。因为实际上人们发现大量的机器学习问题，几乎所有的局部最优是几乎一样好的，也就是说，只要找到一个局部最优点，其实就已经找到了全局最优，比如Orthogonal tensor decomposition就满足这样的性质，还有NIPS16的best student paper证明了matrix completion也满足这样的性质。</p>
+<p>下面讨论一下证明，主要讨论一下第二篇．第一篇论文其实就是用数学的语言在说＂在鞍点加扰动，能够顺着负的特征值方向滑下去＂．第二篇非常有意思，我觉得值得介绍一下想法。</p>
+<p>首先，算法上有了一些改动．算法不再是SGD，而是跑若干步GD，然后跑一步SGD。当然实际上大家是不会这么用的，但是理论分析么，这么考虑没问题。什么时候跑SGD呢？只有当导数比较小，而且已经很长时间没有跑过SGD的时候，才会跑一次。也就是说，只有确实陷在鞍点上了，才会随机扰动一下下。</p>
+<p>因为鞍点有负的特征值，所以只要扰动之后在这个方向上有那么一点点分量，就能够一马平川地滑下去。除非分量非常非常小的情况下才可能会继续陷在鞍点附近。换句话说，如果加了一个随机扰动，其实大概率情况下是能够逃离鞍点的！</p>
+<p>虽然这个想法也很直观，但是要严格地证明很不容易，因为具体函数可能是很复杂的，Hessian矩阵也在不断地变化，所以要说明＂扰动之后会陷在鞍点附近的概率是小概率＂这件事情并不容易。</p>
+<p>作者们采取了一个很巧妙的方法：对于负特征值的那个方向，任何两个点在这两个方向上的投影的距离只要大于u/2, 那么它们中间至少有一个点能够通过多跑几步GD逃离鞍点。也就是说，会持续陷在鞍点附近的点所在的区间至多只有u那么宽！通过计算宽度，我们也就可以计算出概率的上届，说明大概率下这个SGD+GD算法能够逃离鞍点了。</p>
+<hr>
+<p>引自百度百科，相关知识点的简要，方便理解</p>
+<blockquote>
+<p>凸集：具体地说，在欧氏空间中，凸集是对于集合内的每一对点，连接该对点的直线段上的每个点也在该集合内。</p>
 </blockquote>
-<p>至此基本总结结束，后续也许会修改</p>
+<p>倘若出现中空或凹陷如此这般，为非凸集。</p>
+<blockquote>
+<p>凸函数：大陆数学界某些机构关于函数凹凸性定义和国外的定义是相反的。Convex Function在某些中国大陆的数学书中指凹函数。Concave Function指凸函数。举个例子，同济大学高等数学教材对函数的凹凸性定义与此时我们讲的相反，这里的凹凸性是指其上方图是凸集，而同济大学高等数学教材则是指其下方图是凸集，两者定义正好相反。</p>
+<p>凸优化：研究定义于凸集中的凸函数最小化的问题。</p>
+</blockquote>
+<p>额外强调一点：在凸优化中局部最优值必定是全局最优值。</p>
+<blockquote>
+<p>Hessian Matrix：是一个多元函数的二阶偏导数构成的方阵，描述了函数的局部曲率。常用于牛顿法解决优化问题，利用它可判定多元函数的极值问题。在工程实际问题的优化设计中，所列的目标函数往往很复杂，为了使问题简化，常常将目标函数在某点邻域展开成泰勒多项式来逼近原函数，此时函数在某点泰勒展开式的矩阵形式中会涉及到。</p>
+</blockquote>
 
       
     </div>
@@ -531,8 +544,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/30/First post/" rel="next" title="First post">
-                <i class="fa fa-chevron-left"></i> First post
+              <a href="/2020/03/22/tensorflow1-0-多元线性回归/" rel="next" title="tensorflow1.0 多元线性回归">
+                <i class="fa fa-chevron-left"></i> tensorflow1.0 多元线性回归
               </a>
             
           </div>
@@ -540,10 +553,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/07/异常处理/" rel="prev" title="异常处理">
-                异常处理 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -662,7 +671,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、Node-js-amp-Github环境搭建"><span class="nav-number">1.</span> <span class="nav-text">一、Node.js &amp; Github环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#①、下载安装时避免将两个环境置入同一个文件夹"><span class="nav-number">1.0.0.0.1.</span> <span class="nav-text">①、下载安装时避免将两个环境置入同一个文件夹</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#②、创建Github项目时以“账户名-github-io”为格式"><span class="nav-number">1.0.0.0.2.</span> <span class="nav-text">②、创建Github项目时以“账户名.github.io”为格式</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#———————-进入正题———————"><span class="nav-number">1.1.</span> <span class="nav-text">———————-进入正题———————-</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、安装hexo"><span class="nav-number">2.</span> <span class="nav-text">二、安装hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、使用npm安装Github"><span class="nav-number">2.0.1.</span> <span class="nav-text">1、使用npm安装Github</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、关联hexo和Github-page"><span class="nav-number">2.0.2.</span> <span class="nav-text">2、关联hexo和Github page</span></a></li></ol></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#直奔主题"><span class="nav-number">1.</span> <span class="nav-text">直奔主题</span></a></li></ol></div>
             
 
           </div>
