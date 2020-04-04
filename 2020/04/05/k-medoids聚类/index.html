@@ -96,17 +96,19 @@
 
 
 
-  <meta name="description" content="第一部分：Tensorflow基础Tensors张量常量constant:‘’’pythonx = tf.constant([[4,2],[9,5]])print(x) tf.Tensor([[4 2] [9 5]], shape=(2, 2), dtype=int32)‘’’ 可以通过“.numpy()”来得到numpy array类型 ‘’’pythonx.numpy() array([[4,">
+  <meta name="description" content="我们知道对于K-means算法来说，如果数据样本中出现极端的离群值，导致样本数据分布出现一定的扭曲或者说偏离，则会导致聚类效果不好，与期望的效果之间有误差存在，也就是我们所说的极端值敏感。聚类很多情况下都是通过计算点之间的欧式距离来表现亲缘远近的，所以解决在其上产生的问题就逃不过中心点。这次介绍的k-medoids算法自然在处理一些异常值方面具有得天独厚的优势。就原理而言，k-means与k-me">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tensorflow基础">
-<meta property="og:url" content="http://yoursite.com/2020/02/03/tensorflow基础/index.html">
+<meta property="og:title" content="k-medoids聚类">
+<meta property="og:url" content="http://yoursite.com/2020/04/05/k-medoids聚类/index.html">
 <meta property="og:site_name" content="X">
-<meta property="og:description" content="第一部分：Tensorflow基础Tensors张量常量constant:‘’’pythonx = tf.constant([[4,2],[9,5]])print(x) tf.Tensor([[4 2] [9 5]], shape=(2, 2), dtype=int32)‘’’ 可以通过“.numpy()”来得到numpy array类型 ‘’’pythonx.numpy() array([[4,">
+<meta property="og:description" content="我们知道对于K-means算法来说，如果数据样本中出现极端的离群值，导致样本数据分布出现一定的扭曲或者说偏离，则会导致聚类效果不好，与期望的效果之间有误差存在，也就是我们所说的极端值敏感。聚类很多情况下都是通过计算点之间的欧式距离来表现亲缘远近的，所以解决在其上产生的问题就逃不过中心点。这次介绍的k-medoids算法自然在处理一些异常值方面具有得天独厚的优势。就原理而言，k-means与k-me">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-02-06T04:11:56.931Z">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200405014833433.PNG">
+<meta property="og:updated_time" content="2020-04-04T17:54:49.679Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tensorflow基础">
-<meta name="twitter:description" content="第一部分：Tensorflow基础Tensors张量常量constant:‘’’pythonx = tf.constant([[4,2],[9,5]])print(x) tf.Tensor([[4 2] [9 5]], shape=(2, 2), dtype=int32)‘’’ 可以通过“.numpy()”来得到numpy array类型 ‘’’pythonx.numpy() array([[4,">
+<meta name="twitter:title" content="k-medoids聚类">
+<meta name="twitter:description" content="我们知道对于K-means算法来说，如果数据样本中出现极端的离群值，导致样本数据分布出现一定的扭曲或者说偏离，则会导致聚类效果不好，与期望的效果之间有误差存在，也就是我们所说的极端值敏感。聚类很多情况下都是通过计算点之间的欧式距离来表现亲缘远近的，所以解决在其上产生的问题就逃不过中心点。这次介绍的k-medoids算法自然在处理一些异常值方面具有得天独厚的优势。就原理而言，k-means与k-me">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200405014833433.PNG">
 
 
 
@@ -115,7 +117,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/03/tensorflow基础/">
+  <link rel="canonical" href="http://yoursite.com/2020/04/05/k-medoids聚类/">
 
 
 
@@ -125,7 +127,7 @@
   };
 </script>
 
-  <title>tensorflow基础 | X</title>
+  <title>k-medoids聚类 | X</title>
   
 
 
@@ -381,7 +383,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/tensorflow基础/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/05/k-medoids聚类/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="X">
@@ -398,7 +400,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">tensorflow基础
+          <h1 class="post-title" itemprop="name headline">k-medoids聚类
 
               
             
@@ -424,24 +426,12 @@
                 
               
 
-              <time title="创建时间：2020-02-03 12:11:06" itemprop="dateCreated datePublished" datetime="2020-02-03T12:11:06+08:00">2020-02-03</time>
+              <time title="创建时间：2020-04-05 01:54:17 / 修改时间：01:54:49" itemprop="dateCreated datePublished" datetime="2020-04-05T01:54:17+08:00">2020-04-05</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-02-06 12:11:56" itemprop="dateModified" datetime="2020-02-06T12:11:56+08:00">2020-02-06</time>
               
             
           </span>
@@ -474,38 +464,23 @@
       
 
       
-        <h2 id="第一部分：Tensorflow基础"><a href="#第一部分：Tensorflow基础" class="headerlink" title="第一部分：Tensorflow基础"></a>第一部分：Tensorflow基础</h2><h3 id="Tensors张量"><a href="#Tensors张量" class="headerlink" title="Tensors张量"></a>Tensors张量</h3><h4 id="常量constant"><a href="#常量constant" class="headerlink" title="常量constant:"></a>常量constant:</h4><p>‘’’python<br>x = tf.constant([[4,2],[9,5]])<br>print(x)</p>
-<p>tf.Tensor(<br>[[4 2]<br> [9 5]], shape=(2, 2), dtype=int32)<br>‘’’</p>
-<p>可以通过“.numpy()”来得到numpy array类型</p>
-<p>‘’’python<br>x.numpy()</p>
-<p>array([[4, 2],<br>       [9, 5]], dtype=int32)<br>‘’</p>
-<p>像numpy一样，有shape和dtype属性</p>
-<p>‘’’python<br>print(‘shape:’,x.shape)<br>print(‘dx.dtype)</p>
-<p>(2, 2)</p>
-<p><dtype: 'int32'=""><br>‘’’</dtype:></p>
-<p>常用的产生常量的方法是tf.ones和tf.zeros就像numpy的np.ones``np.zeros</p>
-<p>‘’’python<br>print(tf.ones(shape=(2,3)))<br>print(tf.zeros(shape=(3,2)))</p>
-<p>tf.Tensor(<br>[[1. 1. 1.]<br> [1. 1. 1.]], shape=(2, 3), dtype=float32)<br>tf.Tensor(<br>[[0. 0.]<br> [0. 0.]<br> [0. 0.]], shape=(3, 2), dtype=float32)<br>‘’’</p>
-<h3 id="随机数常量random-constant正态分布"><a href="#随机数常量random-constant正态分布" class="headerlink" title="随机数常量random constant正态分布"></a>随机数常量random constant正态分布</h3><p>‘’’python<br>tf.random.normal(shape=(2,2),mean=0,stddev=1.0)</p>
-<tf.tensor: id="12," shape="(2," 2),="" dtype="float32," numpy="array([[-0.05229542," 0.64488363],="" [="" 0.37966082,="" 1.0098479="" ]],="">
+        <p>我们知道对于K-means算法来说，如果数据样本中出现极端的离群值，导致样本数据分布出现一定的扭曲或者说偏离，则会导致聚类效果不好，与期望的效果之间有误差存在，也就是我们所说的极端值敏感。聚类很多情况下都是通过计算点之间的欧式距离来表现亲缘远近的，所以解决在其上产生的问题就逃不过中心点。这次介绍的k-medoids算法自然在处理一些异常值方面具有得天独厚的优势。<br>就原理而言，k-means与k-medoids区别在于中心点的选择。前者通过不断产生K个新的中心点（初始为随机，后续计算均值进行）来划分群集，以达到准则函数收敛的结果，其本质就是在不断寻找符合条件的群集重心；后者，顾名思义，不选用平均值，而是选用最中心的点，即需要计算当前簇各个点到中心点的距离。这也使得我们得到一个其与k-means的不同点，或者说k-medoids的性质，它所选取的中心点都是簇中的点。<br>不过由于算法的复杂性（需要遍历簇中所有点），导致更大的计算资源倾斜。</p>
+<hr>
+<p>简单复习一下顺便对比一下两者算法过程：</p>
+<p>k-means：</p>
+<blockquote>
+<p>1） 任意选择K个对象作为初始的簇中心；<br>2） 分别计算数据集中每个元素与所选簇的中心计算距离（一般采用欧式距离），根据最近邻原则，将元素划分到相应的簇中；<br>3） 计算每个簇中对象的平均值，更新簇的中心；<br>4） 重复上面的步骤，直至更新的簇的中心与原簇的中心的差值在预定范围内，或者达到预设的迭代次数；<br>5） 输出K个簇中心。</p>
+</blockquote>
+<p>k-medoids:</p>
+<blockquote>
+<p>1、任意选取 k 个点作为 medoids<br>2、按照与medoids最近的原则，将剩余点分配到当前最佳的medoids代表的类中<br>3、在每一类中，计算每个成员点对应的准则函数，选取准则函数最小时对应的点作为新的 medoids<br>4、重复2-3的过程，直到所有的 medoids 点不再发生变化，或已达到设定的最大迭代次数<br>其中准则函数为，一类中，某个成员点和其他成员点的距离之和</p>
+</blockquote>
+<hr>
+<p>来一点python的实战<br>由于可使用的第三方库不多，参考了很多文章和博客，找到了可用的库——pyclust，它还依赖于treelib库。<br>具体代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyclust <span class="keyword">import</span> KMedoids</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.manifold <span class="keyword">import</span> TSNE</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="string">'''构造示例数据集（加入少量脏数据）'''</span></span><br><span class="line">data1 = np.random.normal(<span class="number">0</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data2 = np.random.normal(<span class="number">1</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data3 = np.random.normal(<span class="number">2</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data4 = np.random.normal(<span class="number">3</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data5 = np.random.normal(<span class="number">50</span>,<span class="number">0.9</span>,(<span class="number">50</span>,<span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">data = np.concatenate((data1,data2,data3,data4,data5))</span><br><span class="line"></span><br><span class="line"><span class="string">'''准备可视化需要的降维数据'''</span></span><br><span class="line">data_TSNE = TSNE(learning_rate=<span class="number">100</span>).fit_transform(data)</span><br><span class="line"></span><br><span class="line"><span class="string">'''对不同的k进行试探性K-medoids聚类并可视化'''</span></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>,<span class="number">8</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">6</span>):</span><br><span class="line">    k = KMedoids(n_clusters=i,distance=<span class="string">'euclidean'</span>,max_iter=<span class="number">1000</span>).fit_predict(data)</span><br><span class="line">    colors = ([[<span class="string">'red'</span>,<span class="string">'blue'</span>,<span class="string">'black'</span>,<span class="string">'yellow'</span>,<span class="string">'green'</span>][i] <span class="keyword">for</span> i <span class="keyword">in</span> k])</span><br><span class="line">    plt.subplot(<span class="number">219</span>+i)</span><br><span class="line">    plt.scatter(data_TSNE[:,<span class="number">0</span>],data_TSNE[:,<span class="number">1</span>],c=colors,s=<span class="number">10</span>)</span><br><span class="line">    plt.title(<span class="string">'K-medoids Resul of '</span>.format(str(i)))</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>效果：<br><img src="https://img-blog.csdnimg.cn/20200405014833433.PNG" alt="在这里插入图片描述"></p>
+<p>小结：k-medoids面对孤立的点时有更好的效果，但因此也占用了较多的计算资源，后续关于k-medoids有变种算法如：PAM算法 和 CLARA算法这里不作展开。</p>
 
-<h1 id="整数均匀分布"><a href="#整数均匀分布" class="headerlink" title="整数均匀分布"></a>整数均匀分布</h1><p>tf.random.uniform(shape=(2,2),minval=0,maxval=10,dtype=tf.int32)</p>
-<p><tf.tensor: id="16," shape="(2," 2),="" dtype="int32," numpy="array([[6," 3],="" [8,="" 7]],=""><br>‘’’</tf.tensor:></p>
-<h3 id="Variables变量"><a href="#Variables变量" class="headerlink" title="Variables变量"></a>Variables变量</h3><p>变量是一种特别的张量，用来存储可变数值，需要用一些值来初始化<br>‘’’pyhon<br>initial_value = tf.random.normal(shape=(2,2))<br>a = tf.Variable(initial_value)<br>print(a)</p>
-<p><tf.variable 'variable:0'="" shape="(2," 2)="" dtype="float32," numpy="array([[" 0.07630513,="" -0.39769924],="" [-0.9712114="" ,="" -0.62955064]],=""><br>‘’’</tf.variable></p>
-<p>可以通过assign(value)来赋值“=”，或assign_add(value)“+=”，或assign_sub(value)“-=”<br>‘’’python<br>new_value = tf.random.normal(shape=(2, 2))<br>a.assign(new_value)<br>for i in range(2):<br>    for j in range(2):<br>        assert a[i, j] == new_value[i, j]</p>
-<p>added_value = tf.random.normal(shape=(2,2))<br>a.assign_add(added_value)<br>for i in range(2):<br>    for j in range(2):<br>        assert a[i,j] == new_value[i,j]+added_value[i,j]<br>‘’’</p>
-<h3 id="Tensorflow数学运算"><a href="#Tensorflow数学运算" class="headerlink" title="Tensorflow数学运算"></a>Tensorflow数学运算</h3><p>可以像numpy那样做作运算，Tensorflow的不同时这些运算可以放到GPU或TPU上执行<br>‘’’python<br>a = tf.random.normal(shape=(2,2))<br>b = tf.random.normal(shape=(2,2))<br>c = a+b<br>d = tf.square(c)<br>e = tf.exp(c)<br>print(a)<br>print(b)<br>print(c)<br>print(d)<br>print(e)</p>
-<p>tf.Tensor(<br>[[ 1.6862711 -1.4246397]<br> [-1.0287055 -1.3188182]], shape=(2, 2), dtype=float32)<br>tf.Tensor(<br>[[ 1.4519434  0.7635907]<br> [ 1.1213834 -1.4559215]], shape=(2, 2), dtype=float32)<br>tf.Tensor(<br>[[ 3.1382146  -0.661049  ]<br> [ 0.09267795 -2.7747397 ]], shape=(2, 2), dtype=float32)<br>tf.Tensor(<br>[[9.8483906e+00 4.3698579e-01]<br> [8.5892025e-03 7.6991806e+00]], shape=(2, 2), dtype=float32)<br>tf.Tensor(<br>[[23.062654    0.51630944]<br> [ 1.0971084   0.0623657 ]], shape=(2, 2), dtype=float32)<br>‘’’</p>
-<h2 id="GradientTape计算梯度"><a href="#GradientTape计算梯度" class="headerlink" title="GradientTape计算梯度"></a>GradientTape计算梯度</h2><p>和numpy的另一个不同是，可以自动跟踪任何变量的梯度。<br>打开一个GradientTape,然后通过tape.watch()来跟踪变量<br>‘’’python<br>a = tf.random.normal(shape=(2,2))<br>b = tf.random.normal(shape=(2,2))<br>with tf.GradientTape() as tape:<br>    tape.watch(a)#开始记录所有有关a参与过的运算<br>    c = tf.sqrt(tf.square(a)+tf.square(b)) #变量a做一些运算</p>
-<pre><code>#计算c对于a的梯度
-dc_da = tape.gradient(c,a)
-print(dc_da)
-</code></pre><p>tf.Tensor(<br>[[-0.53557533  0.87920487]<br> [ 0.24663754  0.4680054 ]], shape=(2, 2), dtype=float32)<br>‘’’</p>
-<p>对于所有变量，默认状态下会跟踪计算并用来求梯度，所以不用使用tape.watch()<br>‘’’python<br>a = tf.Variable(a)<br>with tf.GradientTape() as tape:<br>    c = tf.sqrt(tf.square(a)+tf.square(b))<br>    dc_da = tape.gradient(c,a)<br>    print(dc_da)</p>
-<p>tf.Tensor(<br>[[-0.53557533  0.87920487]<br> [ 0.24663754  0.4680054 ]], shape=(2, 2), dtype=float32)<br>‘’’<br>可以通过多开几个GradientTape来求高阶导数：<br>‘’’python<br>with tf.GradientTape() as outer_tape:<br>    with tf.GradientTape() as tape:<br>        c = tf.sqrt(tf.square(a)+tf.square(b))<br>        dc_da = tape.gradient(c,a)<br>    d2c_d2a = outer_tape.gradient(dc_da,a)<br>    print(d2c_d2a)</p>
-<p>tf.Tensor(<br>[[0.54411626 0.33872807]<br> [1.5284648  0.5024241 ]], shape=(2, 2), dtype=float32)<br>‘’’</p>
-</tf.tensor:>
       
     </div>
 
@@ -546,8 +521,8 @@ print(dc_da)
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/01/01/二分法/" rel="next" title="二分法">
-                <i class="fa fa-chevron-left"></i> 二分法
+              <a href="/2020/03/29/梯度下降与脱离鞍点/" rel="next" title="梯度下降与脱离鞍点">
+                <i class="fa fa-chevron-left"></i> 梯度下降与脱离鞍点
               </a>
             
           </div>
@@ -555,10 +530,6 @@ print(dc_da)
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/06/激活函数/" rel="prev" title="激活函数">
-                激活函数 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -603,17 +574,8 @@ print(dc_da)
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <div class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -666,23 +628,6 @@ print(dc_da)
         </div>
       </div>
 
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一部分：Tensorflow基础"><span class="nav-number">1.</span> <span class="nav-text">第一部分：Tensorflow基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tensors张量"><span class="nav-number">1.1.</span> <span class="nav-text">Tensors张量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常量constant"><span class="nav-number">1.1.1.</span> <span class="nav-text">常量constant:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#随机数常量random-constant正态分布"><span class="nav-number">1.2.</span> <span class="nav-text">随机数常量random constant正态分布</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#整数均匀分布"><span class="nav-number"></span> <span class="nav-text">整数均匀分布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Variables变量"><span class="nav-number">0.1.</span> <span class="nav-text">Variables变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tensorflow数学运算"><span class="nav-number">0.2.</span> <span class="nav-text">Tensorflow数学运算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GradientTape计算梯度"><span class="nav-number">1.</span> <span class="nav-text">GradientTape计算梯度</span></a></li></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
       
 
       

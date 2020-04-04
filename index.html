@@ -378,6 +378,167 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/05/k-medoids聚类/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="X">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="X">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/04/05/k-medoids聚类/" class="post-title-link" itemprop="url">k-medoids聚类</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-04-05 01:54:17 / 修改时间：01:54:49" itemprop="dateCreated datePublished" datetime="2020-04-05T01:54:17+08:00">2020-04-05</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我们知道对于K-means算法来说，如果数据样本中出现极端的离群值，导致样本数据分布出现一定的扭曲或者说偏离，则会导致聚类效果不好，与期望的效果之间有误差存在，也就是我们所说的极端值敏感。聚类很多情况下都是通过计算点之间的欧式距离来表现亲缘远近的，所以解决在其上产生的问题就逃不过中心点。这次介绍的k-medoids算法自然在处理一些异常值方面具有得天独厚的优势。<br>就原理而言，k-means与k-medoids区别在于中心点的选择。前者通过不断产生K个新的中心点（初始为随机，后续计算均值进行）来划分群集，以达到准则函数收敛的结果，其本质就是在不断寻找符合条件的群集重心；后者，顾名思义，不选用平均值，而是选用最中心的点，即需要计算当前簇各个点到中心点的距离。这也使得我们得到一个其与k-means的不同点，或者说k-medoids的性质，它所选取的中心点都是簇中的点。<br>不过由于算法的复杂性（需要遍历簇中所有点），导致更大的计算资源倾斜。</p>
+<hr>
+<p>简单复习一下顺便对比一下两者算法过程：</p>
+<p>k-means：</p>
+<blockquote>
+<p>1） 任意选择K个对象作为初始的簇中心；<br>2） 分别计算数据集中每个元素与所选簇的中心计算距离（一般采用欧式距离），根据最近邻原则，将元素划分到相应的簇中；<br>3） 计算每个簇中对象的平均值，更新簇的中心；<br>4） 重复上面的步骤，直至更新的簇的中心与原簇的中心的差值在预定范围内，或者达到预设的迭代次数；<br>5） 输出K个簇中心。</p>
+</blockquote>
+<p>k-medoids:</p>
+<blockquote>
+<p>1、任意选取 k 个点作为 medoids<br>2、按照与medoids最近的原则，将剩余点分配到当前最佳的medoids代表的类中<br>3、在每一类中，计算每个成员点对应的准则函数，选取准则函数最小时对应的点作为新的 medoids<br>4、重复2-3的过程，直到所有的 medoids 点不再发生变化，或已达到设定的最大迭代次数<br>其中准则函数为，一类中，某个成员点和其他成员点的距离之和</p>
+</blockquote>
+<hr>
+<p>来一点python的实战<br>由于可使用的第三方库不多，参考了很多文章和博客，找到了可用的库——pyclust，它还依赖于treelib库。<br>具体代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyclust <span class="keyword">import</span> KMedoids</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.manifold <span class="keyword">import</span> TSNE</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="string">'''构造示例数据集（加入少量脏数据）'''</span></span><br><span class="line">data1 = np.random.normal(<span class="number">0</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data2 = np.random.normal(<span class="number">1</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data3 = np.random.normal(<span class="number">2</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data4 = np.random.normal(<span class="number">3</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data5 = np.random.normal(<span class="number">50</span>,<span class="number">0.9</span>,(<span class="number">50</span>,<span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">data = np.concatenate((data1,data2,data3,data4,data5))</span><br><span class="line"></span><br><span class="line"><span class="string">'''准备可视化需要的降维数据'''</span></span><br><span class="line">data_TSNE = TSNE(learning_rate=<span class="number">100</span>).fit_transform(data)</span><br><span class="line"></span><br><span class="line"><span class="string">'''对不同的k进行试探性K-medoids聚类并可视化'''</span></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>,<span class="number">8</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">6</span>):</span><br><span class="line">    k = KMedoids(n_clusters=i,distance=<span class="string">'euclidean'</span>,max_iter=<span class="number">1000</span>).fit_predict(data)</span><br><span class="line">    colors = ([[<span class="string">'red'</span>,<span class="string">'blue'</span>,<span class="string">'black'</span>,<span class="string">'yellow'</span>,<span class="string">'green'</span>][i] <span class="keyword">for</span> i <span class="keyword">in</span> k])</span><br><span class="line">    plt.subplot(<span class="number">219</span>+i)</span><br><span class="line">    plt.scatter(data_TSNE[:,<span class="number">0</span>],data_TSNE[:,<span class="number">1</span>],c=colors,s=<span class="number">10</span>)</span><br><span class="line">    plt.title(<span class="string">'K-medoids Resul of '</span>.format(str(i)))</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>效果：<br><img src="https://img-blog.csdnimg.cn/20200405014833433.PNG" alt="在这里插入图片描述"></p>
+<p>小结：k-medoids面对孤立的点时有更好的效果，但因此也占用了较多的计算资源，后续关于k-medoids有变种算法如：PAM算法 和 CLARA算法这里不作展开。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+      <div>
+       
+      </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/29/梯度下降与脱离鞍点/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2144,206 +2305,6 @@ print(dc_da)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/01/二分法/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="X">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="X">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/01/01/二分法/" class="post-title-link" itemprop="url">二分法</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2020-01-01 00:12:16 / 修改时间：00:16:14" itemprop="dateCreated datePublished" datetime="2020-01-01T00:12:16+08:00">2020-01-01</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><em>2019年终记事：一年的经历那么多，回忆起来却短的不可想象。2019年的最后一篇博客，回想第一篇到现在，虽然一路上走走停停，但学习的脚步还在前进。短短二十年放弃的东西比一声叹息多多了，回头看来人生得要有一件能坚持下去的东西……新年的钟声带不走2019的遗憾，希望它能带来2020的希望。</em></p>
-<hr>
-<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
-<p>在计算机科学中，二分搜索，也称为半间隔搜索，对数搜索，是一种搜索算法，用于查找排序数组中目标值的位置。二分搜索将目标值与数组的中间元素进行比较。<br>如果它们不相等，则消除目标不能位于其中的那一半，并在剩余的一半上继续搜索，再次将中间元素与目标值进行比较，并重复此过程直到找到目标值。<br>如果搜索以其余一半为空结束，则目标不在数组中。<br>在最坏的情况下，二分搜索会以对数时间运行，进行$O(\log_{}n)$比较，其中${n}$是数组中元素的数量，${O}$是Big O表示法， 而${\log}$是对数。 除了小数组以外，二分搜索比线性搜索快。 但是，必须首先对数组进行排序才能应用二进制搜索。有专门为快速搜索而设计的专用数据结构，例如哈希表，可以比二进制搜索更有效地进行搜索。 但是，二分搜索可用于解决更广泛的问题，例如，即使数组中不存在目标，也要在数组中找到相对于目标而言第二小的元素。<br>二进制搜索树和B树数据结构基于二分搜索。<br>——wiki</p>
-</blockquote>
-<p>在leetcode刷题时我们总能遇到可以利用二分搜索解决的问题，但往往我们写得出来的二分搜索代码并不能work或者潜藏有bug。造成这种现象的原因是纷杂的情况导致算法的细节处理不同而容易忽视边界的细节问题。我们需要一个简洁明了的思路来将问题一般化。矛盾的特殊性应该包含在矛盾的一般性当中，用高度抽象化的过程对具体问题降维打击。</p>
-<p>编写博客时翻阅了不少leetcode中的二分题解，在此借鉴并总结一下。在完成的过程中翻阅了《计算机程序设计艺术》的相关章节，受益颇多，一部分内容会穿插在文中讲述。</p>
-<h2 id="入题"><a href="#入题" class="headerlink" title="入题"></a>入题</h2><p><strong>一些背景——</strong></p>
-<p>《计算机程序设计艺术》的作者 Donald Knuth：</p>
-<blockquote>
-<p>Although the basic idea of binary search is comparatively straightforward, the details can be surprisingly tricky …</p>
-</blockquote>
-<p>译：“虽然二分搜索的基本思想很直白，但细节出奇的难以应对…”</p>
-<p>他在《计算机程序设计艺术（第三卷）》中也指出了（大意）:也许是第一部出版的关于非数值程序设计方法的书（1946）中，首先提出了二分查找。再到后来的许多人对二分算法的改进直至60年代往后，所有工作才算是基本完成。</p>
-<p><strong>一些待解决的问题——</strong></p>
-<ol>
-<li>中位数索引值的获取</li>
-<li>循环执行条件的设置与返回值的选择</li>
-<li>分支语句的选择</li>
-</ol>
-<p><strong>关于模板——</strong></p>
-<p>这里借助Thomas H. Cormen在《算法基础—打开算法之门》中的一段伪代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">程序   BINARY-SEARCH(A,n,x)</span><br><span class="line"></span><br><span class="line">输入：</span><br><span class="line">·A：一个数组；</span><br><span class="line">·n：要查找的数组A中元素的个数；</span><br><span class="line">·x：要查找的值；</span><br><span class="line"></span><br><span class="line">输出：要么是满足A[i]=x的索引i，要么是一个特殊值 NOT-FOUND（可取相对数组A的任何无效索引值，例如0或任意负整数）。</span><br><span class="line"></span><br><span class="line">//左右索性记为p,r；中间位置记为q</span><br><span class="line"></span><br><span class="line">1. 将p赋值为1，将r赋值为n。</span><br><span class="line">2. 只要p≤r，执行如下操作：</span><br><span class="line">        A. 将q赋值为⌊(p+r)/2⌋。</span><br><span class="line">        B. 如果A[q]=x，那么返回q。</span><br><span class="line">        C. 否则（A[q]≠x），如果A[q]&gt;x，那么将r赋值为q-1。</span><br><span class="line">        D. 否则（A[q]&lt;x），那么将p赋值为q+1。</span><br><span class="line">3. 返回 NOT-FOUND。</span><br></pre></td></tr></table></figure></p>
-<p>这段算法描述是我们常规的理解和处理方法，这次打算讨论的是在它的基础上进行一定的改变，并简单谈谈优劣。</p>
-<p><strong>基本思想——</strong></p>
-<p>二分的基本思想其实就是每次可以将当前的数中将近一般的不满足要求的数全部除掉，所以大O时间复杂度是$O(\log_{2}n)$,可以达到对数级的复杂度。</p>
-<p>为了真正了解二分搜索算法中所发生的事情，最好把它想象成一棵二叉搜索树。</p>
-<p>关于平均比较次数暂且不论。</p>
-<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p><strong>1. 中位数索引值</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> mid=(left+right)/<span class="number">2</span>;</span><br></pre></td></tr></table></figure>
-<p>上面的代码是我们经常写的，但它确实存在有bug，在于当left与right都很大的时候，left+right很有可能超过int类型能表示的最大值（32位机下为$2^{31}-1$，即2147483647），此时会产生整形溢出产生负值，为了避免此问题的发生一般会写作下面的形式：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> mid=left+(right-left)/<span class="number">2</span>;</span><br></pre></td></tr></table></figure></p>
-<p>可以有效避免绝大多数会产生溢出的情况。但它并不是最完美的写法。我们知道对于二进制计算机来说，除法的计算并不容易完成，二进制的位运算应该是最简单快捷的。当面对需要以二作为除数的时候，选择&gt;&gt;1，会带来更好的效果。但仅仅只是修改这一点，mid的计算仍旧存在冗余的部分。</p>
-<p>我们从原码的角度思考，其实不难发现，因为第一位用来表示正负符号的缘故，当发4个字节下可以表示的最大正整数比int最大值两倍还多。当发生整形溢出时，实际存储的二进制只不过因为最高位从0变为1，导致整形正数被认为是整形负数，无法正确表示我们目标的数值，但其实内部存储的数据如果按无符号整形（即最高位具有二进制权值，而非表示符号）来输出其实是我们需要的值，此时再对这个数进行<font color="#FF0000">无符号的&gt;&gt;1</font>操作得到我们需要的除二结果。</p>
-<p>关于无符号右移，在java中使用&gt;&gt;&gt;，所以java代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> mid = (right + left) &gt;&gt;&gt; <span class="number">1</span> ;</span><br></pre></td></tr></table></figure></p>
-<p>而在c语言中，仅有的&gt;&gt;运算符却是在有符号位时产生的是有符号的右移，所以运算前需要将运算数值强制类型转换为无符号型，再右移。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> mid=((<span class="keyword">unsigned</span> <span class="keyword">int</span>)(left+right))&gt;&gt;<span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
-<p>不进行强制类型转换的话，会把溢出产生的负数值除二。具体大家看下面的例子：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a=<span class="number">2147483647</span>,b=<span class="number">2147483645</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d"</span>,(a+b)&gt;&gt;<span class="number">1</span>);<span class="comment">//结果输出-2</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%u"</span>,((<span class="keyword">unsigned</span> <span class="keyword">int</span>)(a+b))&gt;&gt;<span class="number">1</span>);<span class="comment">//结果输出2147483646</span></span><br></pre></td></tr></table></figure></p>
-<p><strong>2. 算法设计</strong></p>
-<p>这里将之前提出的关于“循环执行条件的设置与返回值的选择”以及“分支选择”问题归结在一起，我们其实是从算法设计的角度来考虑的。</p>
-<p>首先如上面的伪代码，我们循环的条件设置的为left≤right，出循环时的情况是left已经越过right，表示全部的元素都被搜索完。我们的修改是将循环条件改为left &lt; right,此时出循环的情况为left与right相等，表示整个数组只有现在唯一一个元素没有被搜索，也就是下标为left（right）的元素。根据不同的情形，对最后一个元素进行判断。比如说，我们知道这个数组一定会有我们搜索的值时，此时不用判断就可以知道当其他元素都被排除时，最后这个就是我们要找的元素。如果我们不确定是否一定存在，那么在循环外部额外判断此时最后的元素是否满足条件即可。</p>
-<p>问题的关键在于这样的设计意义是什么，因为当我们用之前的方法，我们在每一次都需要判断是否中值是我们需要的值，但是根据统计规律要查找的数据一般情况下出现在中间的情况并不多。而且出循环时表示没有找到，举个例子：某些情况下我们会想把没有找到的元素添加进我们所查找的表中时，我们想先返回插入的位置，此时我们需要考虑返回left或者right。而每次遇到不同的问题我们需要返回的值都需要根据不同的情况选择，这样的设计并不完美。我们对于任意情况下都可以统一处理是理想状态，这样这段代码的复用性也会变高。</p>
-<p>关于死循环，死循环容易发生在只有 2 个元素时，我需要慎重选择中位数，一定要确保：</p>
-<ol>
-<li>如果分支的逻辑，在选择左边界的时候，不能排除中位数，那么中位数就选“右中位数”，只有这样区间才会收缩，否则进入死循环。</li>
-<li>同理，如果分支的逻辑，在选择右边界的时候，不能排除中位数，那么中位数就选“左中位数”，只有这样区间才会收缩，否则进入死循环。</li>
-</ol>
-<p>在区间中的元素只剩下 2 个时候，例如：left = 3，right = 4。此时左中位数就是左边界，如果你的逻辑执行到 left = mid 这个分支，且你选择的中位数是左中位数，此时左边界就不会得到更新，区间就不会再收缩（理解这句话是关键），从而进入死循环；<br>为了避免出现死循环，你需要选择中位数是右中位数，当逻辑执行到 left = mid 这个分支的时候，因为你选择了右中位数，让逻辑可以转而执行到 right = mid - 1 让区间收缩，最终成为 1 个数，退出 while 循环。</p>
-<h1 id="总结与延申"><a href="#总结与延申" class="headerlink" title="总结与延申"></a>总结与延申</h1><p>其实Donald Knuth在著作中也指出了</p>
-<blockquote>
-<p>H.Bottenbruch迈出了二分算法的第二步，介绍了有趣的变形，避免了在最后结束之前单作一次相等判断：在步骤B2中利用$i⬅⌈(l+u)/2⌉$代替$⌊(l+u)/2⌋$，每当 $K≥K_i$时置$l⬅i$；然后在每一步中$u-l$都减值。最后，当$l=u$时，我们有$K_l≤K≤K_{l+1}$，而且再做一次比较即可判断这个查找是否成功（假定开始时$K≥K_l$）。这个思想子啊许多计算机上稍微加速了内循环，而且同样的原理可以在这一节讨论的所有算法使用，但由于此前推导出的一次成功的平均查找次数于一次不成功的平均查找次数之间的关系一次成功的查找平均将要求大约再做一次迭代。由于内循环仅执行$lgN$次，因此在这一次额外的迭代与一次更快的循环之间的折衷并不节省时间，除非N非常大。在含有重复码值时，获取该算法给定码值最右出现，这一性质有时很重要。<br><em>大师的思想与见识比我们深远的多，多多读书无疑是一场对于世界和自我的再发掘。</em></p>
-</blockquote>
-<p>在上述描述中，我们不难看出来其实整个算法的核心就是在靠左右边界夹逼，而我们做出的改变其实再更深刻的讨论中，在不涉及大数量的情况下，对时间的影响并不明显。但是这种算法仍然有可用性，就如我在之前分析的一样。</p>
-<p>最后的一点延申，我们的二分使用了left mid right三个指针，而仅使用如下两个量，记录当前位置i,和它的变化速度δ；每次不相等的比较之后，我们可以置i⬅1±δ和δ⬅δ/2（近似地）。这是可以的，但要对细节极端小心才行，简化的解决方法注定引起失误！这个算法实现后，产生的一颗“均匀的”二分查找树，我们可以观察它得到更好的算法。</p>
-<p>而且另外一点我们在整个过程的观察中，其实可以发现斐波那契数列可以起到和2的乘方相似的作用。斐波那契搜索就是在二分查找的基础上根据斐波那契数列进行分割的。在斐波那契数列找一个等于略大于查找表中元素个数的数F[n]，将原查找表扩展为长度为F[n]<br>(如果要补充元素，则补充重复最后一个元素，直到满足F[n]个元素)，完成后进行斐波那契分割，即F[n]个元素分割为前半部分F[n-1]个元素，后半部分F[n-2]个元素，找出要查找的元素在那一部分并递归，直到找到。斐波那契查找，是区间中单峰函数的搜索技术。乍看之下，似乎有些神秘，就如Donald Knuth所说，如果我们简单地把程序拿出来并试图看看它在干什么活，它似乎在变魔术，但只要把查找树画出来，神秘感就消失了。<br>这次地介绍就到此结束了。</p>
-<p><em><font color="#FF0000" size="0">关于平均比较数和均匀二分查找等详细内容，本文暂时未涉及，后续可能补充，有兴趣的读者可以自行了解。</font></em></p>
-<hr>
-<p align="right"><font face="Segoe Script">Attempt the end;and never stand to doubt;<br>
-Nothing's so hard,but search will find it out.</font></p>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-      <div>
-       
-      </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2393,7 +2354,7 @@ Nothing's so hard,but search will find it out.</font></p>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

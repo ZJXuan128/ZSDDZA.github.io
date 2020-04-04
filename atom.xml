@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-03-28T16:48:38.128Z</updated>
+  <updated>2020-04-04T17:54:49.679Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>k-medoids聚类</title>
+    <link href="http://yoursite.com/2020/04/05/k-medoids%E8%81%9A%E7%B1%BB/"/>
+    <id>http://yoursite.com/2020/04/05/k-medoids聚类/</id>
+    <published>2020-04-04T17:54:17.000Z</published>
+    <updated>2020-04-04T17:54:49.679Z</updated>
+    
+    <content type="html"><![CDATA[<p>我们知道对于K-means算法来说，如果数据样本中出现极端的离群值，导致样本数据分布出现一定的扭曲或者说偏离，则会导致聚类效果不好，与期望的效果之间有误差存在，也就是我们所说的极端值敏感。聚类很多情况下都是通过计算点之间的欧式距离来表现亲缘远近的，所以解决在其上产生的问题就逃不过中心点。这次介绍的k-medoids算法自然在处理一些异常值方面具有得天独厚的优势。<br>就原理而言，k-means与k-medoids区别在于中心点的选择。前者通过不断产生K个新的中心点（初始为随机，后续计算均值进行）来划分群集，以达到准则函数收敛的结果，其本质就是在不断寻找符合条件的群集重心；后者，顾名思义，不选用平均值，而是选用最中心的点，即需要计算当前簇各个点到中心点的距离。这也使得我们得到一个其与k-means的不同点，或者说k-medoids的性质，它所选取的中心点都是簇中的点。<br>不过由于算法的复杂性（需要遍历簇中所有点），导致更大的计算资源倾斜。</p><hr><p>简单复习一下顺便对比一下两者算法过程：</p><p>k-means：</p><blockquote><p>1） 任意选择K个对象作为初始的簇中心；<br>2） 分别计算数据集中每个元素与所选簇的中心计算距离（一般采用欧式距离），根据最近邻原则，将元素划分到相应的簇中；<br>3） 计算每个簇中对象的平均值，更新簇的中心；<br>4） 重复上面的步骤，直至更新的簇的中心与原簇的中心的差值在预定范围内，或者达到预设的迭代次数；<br>5） 输出K个簇中心。</p></blockquote><p>k-medoids:</p><blockquote><p>1、任意选取 k 个点作为 medoids<br>2、按照与medoids最近的原则，将剩余点分配到当前最佳的medoids代表的类中<br>3、在每一类中，计算每个成员点对应的准则函数，选取准则函数最小时对应的点作为新的 medoids<br>4、重复2-3的过程，直到所有的 medoids 点不再发生变化，或已达到设定的最大迭代次数<br>其中准则函数为，一类中，某个成员点和其他成员点的距离之和</p></blockquote><hr><p>来一点python的实战<br>由于可使用的第三方库不多，参考了很多文章和博客，找到了可用的库——pyclust，它还依赖于treelib库。<br>具体代码如下：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyclust <span class="keyword">import</span> KMedoids</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.manifold <span class="keyword">import</span> TSNE</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="string">'''构造示例数据集（加入少量脏数据）'''</span></span><br><span class="line">data1 = np.random.normal(<span class="number">0</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data2 = np.random.normal(<span class="number">1</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data3 = np.random.normal(<span class="number">2</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data4 = np.random.normal(<span class="number">3</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data5 = np.random.normal(<span class="number">50</span>,<span class="number">0.9</span>,(<span class="number">50</span>,<span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">data = np.concatenate((data1,data2,data3,data4,data5))</span><br><span class="line"></span><br><span class="line"><span class="string">'''准备可视化需要的降维数据'''</span></span><br><span class="line">data_TSNE = TSNE(learning_rate=<span class="number">100</span>).fit_transform(data)</span><br><span class="line"></span><br><span class="line"><span class="string">'''对不同的k进行试探性K-medoids聚类并可视化'''</span></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>,<span class="number">8</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">6</span>):</span><br><span class="line">    k = KMedoids(n_clusters=i,distance=<span class="string">'euclidean'</span>,max_iter=<span class="number">1000</span>).fit_predict(data)</span><br><span class="line">    colors = ([[<span class="string">'red'</span>,<span class="string">'blue'</span>,<span class="string">'black'</span>,<span class="string">'yellow'</span>,<span class="string">'green'</span>][i] <span class="keyword">for</span> i <span class="keyword">in</span> k])</span><br><span class="line">    plt.subplot(<span class="number">219</span>+i)</span><br><span class="line">    plt.scatter(data_TSNE[:,<span class="number">0</span>],data_TSNE[:,<span class="number">1</span>],c=colors,s=<span class="number">10</span>)</span><br><span class="line">    plt.title(<span class="string">'K-medoids Resul of '</span>.format(str(i)))</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure><p>效果：<br><img src="https://img-blog.csdnimg.cn/20200405014833433.PNG" alt="在这里插入图片描述"></p><p>小结：k-medoids面对孤立的点时有更好的效果，但因此也占用了较多的计算资源，后续关于k-medoids有变种算法如：PAM算法 和 CLARA算法这里不作展开。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;我们知道对于K-means算法来说，如果数据样本中出现极端的离群值，导致样本数据分布出现一定的扭曲或者说偏离，则会导致聚类效果不好，与期望的效果之间有误差存在，也就是我们所说的极端值敏感。聚类很多情况下都是通过计算点之间的欧式距离来表现亲缘远近的，所以解决在其上产生的问题就
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>梯度下降与脱离鞍点</title>
