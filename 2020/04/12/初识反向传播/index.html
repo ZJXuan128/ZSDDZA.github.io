@@ -96,19 +96,25 @@
 
 
 
-  <meta name="description" content="我们知道对于K-means算法来说，如果数据样本中出现极端的离群值，导致样本数据分布出现一定的扭曲或者说偏离，则会导致聚类效果不好，与期望的效果之间有误差存在，也就是我们所说的极端值敏感。聚类很多情况下都是通过计算点之间的欧式距离来表现亲缘远近的，所以解决在其上产生的问题就逃不过中心点。这次介绍的k-medoids算法自然在处理一些异常值方面具有得天独厚的优势。就原理而言，k-means与k-me">
+  <meta name="description" content="引入在单层感知机模型中，对于输入与输出之间的权重调整依赖于预测产生的误差，由于不含隐藏层，误差可以直接计算得到。而对于多层网络来说，由于隐藏层的存在，输入输出之间的权重变得复杂，显然直接计算并不合理，而是需要通过从输出到输入反方向逐层计算。 由于是从输出到输入，所以我们一定需要先有一个正向传播的过程。使得样本从输入层开始，由上至下逐层经隐节点计算处理，最终样本信息被传送到输出层节点，得到预测的结果">
 <meta property="og:type" content="article">
-<meta property="og:title" content="k-medoids聚类">
-<meta property="og:url" content="http://yoursite.com/2020/04/05/k-medoids聚类/index.html">
+<meta property="og:title" content="初识反向传播">
+<meta property="og:url" content="http://yoursite.com/2020/04/12/初识反向传播/index.html">
 <meta property="og:site_name" content="X">
-<meta property="og:description" content="我们知道对于K-means算法来说，如果数据样本中出现极端的离群值，导致样本数据分布出现一定的扭曲或者说偏离，则会导致聚类效果不好，与期望的效果之间有误差存在，也就是我们所说的极端值敏感。聚类很多情况下都是通过计算点之间的欧式距离来表现亲缘远近的，所以解决在其上产生的问题就逃不过中心点。这次介绍的k-medoids算法自然在处理一些异常值方面具有得天独厚的优势。就原理而言，k-means与k-me">
+<meta property="og:description" content="引入在单层感知机模型中，对于输入与输出之间的权重调整依赖于预测产生的误差，由于不含隐藏层，误差可以直接计算得到。而对于多层网络来说，由于隐藏层的存在，输入输出之间的权重变得复杂，显然直接计算并不合理，而是需要通过从输出到输入反方向逐层计算。 由于是从输出到输入，所以我们一定需要先有一个正向传播的过程。使得样本从输入层开始，由上至下逐层经隐节点计算处理，最终样本信息被传送到输出层节点，得到预测的结果">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20200405014833433.PNG">
-<meta property="og:updated_time" content="2020-04-04T17:54:49.679Z">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMDFiLmdpZg">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMDkuZ2lm">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMTAuZ2lm">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMTEuZ2lm">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMTQuZ2lm">
+<meta property="og:image" content="http://galaxy.agh.edu.pl/~vlsi/AI/backp_t_en/backprop_files/img17.gif">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMTkuZ2lm">
+<meta property="og:updated_time" content="2020-04-11T16:06:46.019Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="k-medoids聚类">
-<meta name="twitter:description" content="我们知道对于K-means算法来说，如果数据样本中出现极端的离群值，导致样本数据分布出现一定的扭曲或者说偏离，则会导致聚类效果不好，与期望的效果之间有误差存在，也就是我们所说的极端值敏感。聚类很多情况下都是通过计算点之间的欧式距离来表现亲缘远近的，所以解决在其上产生的问题就逃不过中心点。这次介绍的k-medoids算法自然在处理一些异常值方面具有得天独厚的优势。就原理而言，k-means与k-me">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200405014833433.PNG">
+<meta name="twitter:title" content="初识反向传播">
+<meta name="twitter:description" content="引入在单层感知机模型中，对于输入与输出之间的权重调整依赖于预测产生的误差，由于不含隐藏层，误差可以直接计算得到。而对于多层网络来说，由于隐藏层的存在，输入输出之间的权重变得复杂，显然直接计算并不合理，而是需要通过从输出到输入反方向逐层计算。 由于是从输出到输入，所以我们一定需要先有一个正向传播的过程。使得样本从输入层开始，由上至下逐层经隐节点计算处理，最终样本信息被传送到输出层节点，得到预测的结果">
+<meta name="twitter:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMDFiLmdpZg">
 
 
 
@@ -117,7 +123,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/04/05/k-medoids聚类/">
+  <link rel="canonical" href="http://yoursite.com/2020/04/12/初识反向传播/">
 
 
 
@@ -127,7 +133,7 @@
   };
 </script>
 
-  <title>k-medoids聚类 | X</title>
+  <title>初识反向传播 | X</title>
   
 
 
@@ -383,7 +389,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/05/k-medoids聚类/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/12/初识反向传播/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="X">
@@ -400,7 +406,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">k-medoids聚类
+          <h1 class="post-title" itemprop="name headline">初识反向传播
 
               
             
@@ -426,7 +432,7 @@
                 
               
 
-              <time title="创建时间：2020-04-05 01:54:17 / 修改时间：01:54:49" itemprop="dateCreated datePublished" datetime="2020-04-05T01:54:17+08:00">2020-04-05</time>
+              <time title="创建时间：2020-04-12 00:06:15 / 修改时间：00:06:46" itemprop="dateCreated datePublished" datetime="2020-04-12T00:06:15+08:00">2020-04-12</time>
             
 
             
@@ -464,22 +470,19 @@
       
 
       
-        <p>我们知道对于K-means算法来说，如果数据样本中出现极端的离群值，导致样本数据分布出现一定的扭曲或者说偏离，则会导致聚类效果不好，与期望的效果之间有误差存在，也就是我们所说的极端值敏感。聚类很多情况下都是通过计算点之间的欧式距离来表现亲缘远近的，所以解决在其上产生的问题就逃不过中心点。这次介绍的k-medoids算法自然在处理一些异常值方面具有得天独厚的优势。<br>就原理而言，k-means与k-medoids区别在于中心点的选择。前者通过不断产生K个新的中心点（初始为随机，后续计算均值进行）来划分群集，以达到准则函数收敛的结果，其本质就是在不断寻找符合条件的群集重心；后者，顾名思义，不选用平均值，而是选用最中心的点，即需要计算当前簇各个点到中心点的距离。这也使得我们得到一个其与k-means的不同点，或者说k-medoids的性质，它所选取的中心点都是簇中的点。<br>不过由于算法的复杂性（需要遍历簇中所有点），导致更大的计算资源倾斜。</p>
-<hr>
-<p>简单复习一下顺便对比一下两者算法过程：</p>
-<p>k-means：</p>
-<blockquote>
-<p>1） 任意选择K个对象作为初始的簇中心；<br>2） 分别计算数据集中每个元素与所选簇的中心计算距离（一般采用欧式距离），根据最近邻原则，将元素划分到相应的簇中；<br>3） 计算每个簇中对象的平均值，更新簇的中心；<br>4） 重复上面的步骤，直至更新的簇的中心与原簇的中心的差值在预定范围内，或者达到预设的迭代次数；<br>5） 输出K个簇中心。</p>
-</blockquote>
-<p>k-medoids:</p>
-<blockquote>
-<p>1、任意选取 k 个点作为 medoids<br>2、按照与medoids最近的原则，将剩余点分配到当前最佳的medoids代表的类中<br>3、在每一类中，计算每个成员点对应的准则函数，选取准则函数最小时对应的点作为新的 medoids<br>4、重复2-3的过程，直到所有的 medoids 点不再发生变化，或已达到设定的最大迭代次数<br>其中准则函数为，一类中，某个成员点和其他成员点的距离之和</p>
-</blockquote>
-<hr>
-<p>来一点python的实战<br>由于可使用的第三方库不多，参考了很多文章和博客，找到了可用的库——pyclust，它还依赖于treelib库。<br>具体代码如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyclust <span class="keyword">import</span> KMedoids</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.manifold <span class="keyword">import</span> TSNE</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="string">'''构造示例数据集（加入少量脏数据）'''</span></span><br><span class="line">data1 = np.random.normal(<span class="number">0</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data2 = np.random.normal(<span class="number">1</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data3 = np.random.normal(<span class="number">2</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data4 = np.random.normal(<span class="number">3</span>,<span class="number">0.9</span>,(<span class="number">1000</span>,<span class="number">10</span>))</span><br><span class="line">data5 = np.random.normal(<span class="number">50</span>,<span class="number">0.9</span>,(<span class="number">50</span>,<span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">data = np.concatenate((data1,data2,data3,data4,data5))</span><br><span class="line"></span><br><span class="line"><span class="string">'''准备可视化需要的降维数据'''</span></span><br><span class="line">data_TSNE = TSNE(learning_rate=<span class="number">100</span>).fit_transform(data)</span><br><span class="line"></span><br><span class="line"><span class="string">'''对不同的k进行试探性K-medoids聚类并可视化'''</span></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>,<span class="number">8</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>,<span class="number">6</span>):</span><br><span class="line">    k = KMedoids(n_clusters=i,distance=<span class="string">'euclidean'</span>,max_iter=<span class="number">1000</span>).fit_predict(data)</span><br><span class="line">    colors = ([[<span class="string">'red'</span>,<span class="string">'blue'</span>,<span class="string">'black'</span>,<span class="string">'yellow'</span>,<span class="string">'green'</span>][i] <span class="keyword">for</span> i <span class="keyword">in</span> k])</span><br><span class="line">    plt.subplot(<span class="number">219</span>+i)</span><br><span class="line">    plt.scatter(data_TSNE[:,<span class="number">0</span>],data_TSNE[:,<span class="number">1</span>],c=colors,s=<span class="number">10</span>)</span><br><span class="line">    plt.title(<span class="string">'K-medoids Resul of '</span>.format(str(i)))</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p>效果：<br><img src="https://img-blog.csdnimg.cn/20200405014833433.PNG" alt="在这里插入图片描述"></p>
-<p>小结：k-medoids面对孤立的点时有更好的效果，但因此也占用了较多的计算资源，后续关于k-medoids有变种算法如：PAM算法 和 CLARA算法这里不作展开。</p>
+        <h3 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h3><p>在单层感知机模型中，对于输入与输出之间的权重调整依赖于预测产生的误差，由于不含隐藏层，误差可以直接计算得到。而对于多层网络来说，由于隐藏层的存在，输入输出之间的权重变得复杂，显然直接计算并不合理，而是需要通过从输出到输入反方向逐层计算。</p>
+<p>由于是从输出到输入，所以我们一定需要先有一个正向传播的过程。使得样本从输入层开始，由上至下逐层经隐节点计算处理，最终样本信息被传送到输出层节点，得到预测的结果。再根据正向传播得到的结果也就是预测经行误差计算。</p>
+<p>由于有了误差和输出，以及之前传播过来的网络，就有了反向传播的原材料，可以开始进行反向传播了。反向传播无法直接计算隐节点的预测误差，但却可以利用输出节点的预测误差来逐层估计隐节点的误差，也就是将输出节点的预测误差反方向传播到上层隐节点，逐层调整连接权重，直至输入节点和隐节点的权重全部得到调整，使得网络输出值越来越逼近实际值。</p>
+<h3 id="细节"><a href="#细节" class="headerlink" title="细节"></a>细节</h3><p>每个神经元都由两个单元组成。第一个单元的功能是把每个输入信号和对应权重系数($w_{i}$)作乘积然后对这些乘积求和。第二个单元实现了一个非线性函数。这个函数也称为神经元激活函数(neuron activation function)。如下图所示，信号$e$是加法器（即第一个单元）的输出信号，而$y = f(e)$是非线性函数（即第二个单元）的输出信号。显然，$y$也同时是这整个神经元的输出信号。<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMDFiLmdpZg" alt="在这里插入图片描述"><br>一般这个非线性激活函数采用sigmoid函数。节点的输出被限制在0~1的范围内。对于分类问题，输出节点给出的是预测类别的概率值；对于回归问题，输出节点给出的标准化处理后的预测值，只需还原处理即可。<br>使用sigmoid的原因：</p>
+<ul>
+<li>在模型开始训练阶段，由于连接权重的设置要求满足均值为0的均匀分布，所以初期的连接权重在0值附近，使得加法器结果也在0附近。此时sigmoid函数的斜率近似为一个常数，输入输出间呈近似线性关系，模型较为简单；</li>
+<li>随着模型训练的进行，网络权重不断调整，节点加法器的结果逐渐偏离0值，输入输出逐渐呈现出非线性关系，模型逐渐复杂起来，并且输入的变化对输出的影响程度逐渐减小</li>
+<li>到模型训练的后期，节点加法器结果远离0，此时输入的变化将不再引起输出的明显变动，输出基本趋于稳定。神经网络的预测误差不再随着连接权重的调整而得到明显改善，预测结果稳定，模型训练结束。</li>
+</ul>
+<p>可见，sigmoid激活函数较好的体现了连接权重修正过程中，模型从近似线性到非线性的渐进转变过程。</p>
+<p>除此之外，sigmoid激活函数还具有无限次可微的特点，这使得反向传播能够采用梯度下降法来挑战连接权重。</p>
+<h3 id="关键过程"><a href="#关键过程" class="headerlink" title="关键过程"></a>关键过程</h3><p>由于权重的不同，会导致前置神经元对后续紧邻的后置神经元传递的误差不同，或者说对后置神经元的误差贡献度不同，所以在进行反向传播的时候，不能将误差均分到前置 的神经元，而是应该根据权值对误差进行反向的传递。<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMDkuZ2lm" alt="在这里插入图片描述"><br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMTAuZ2lm" alt="在这里插入图片描述"><br>如果前置的神经元对后置多个神经元都传递了误差，那反向传播的时候潜质的误差需要按照权重对后置的误差求和。<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMTEuZ2lm" alt="在这里插入图片描述"><br>当每个神经元的误差信号都已经被计算出来之后，我们就可以开始修改每个神经元输入结点的权重系数了。在下面的公式中，$\frac{\mathrm{df_1(e)} }{\mathrm{d} e}$表示对应的神经元激活函数的导数。<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMTQuZ2lm" alt="在这里插入图片描述"><br><img src="http://galaxy.agh.edu.pl/~vlsi/AI/backp_t_en/backprop_files/img17.gif" alt="
+"><br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMTkuZ2lm" alt="在这里插入图片描述"><br><em>计算是逐层的，这里只展示一条链上（$x_1—&gt;f_1{e}—&gt;f_4{e}—&gt;f_5{e}$）的计算，同层计算方式相同不多描述</em><br><em>具体的调整和计算方法涉及到<a href="https://zhuanlan.zhihu.com/p/36564434" target="_blank" rel="noopener">梯度下降算法</a></em><br>系数$\eta$会影响网络的训练速度。有几种技术可以用于选择系数$\eta$。第一种方法是以较大的参数值开始训练过程。在建立权重系数的同时，参数也逐渐减小。第二种方法更复杂，它以较小的参数值开始训练。在训练的过程中，参数增加，然后在最后阶段参数再次减小。以较小的参数值开始训练使得我们可以确定权重参数的符号。</p>
 
       
     </div>
@@ -521,8 +524,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/03/29/梯度下降与脱离鞍点/" rel="next" title="梯度下降与脱离鞍点">
-                <i class="fa fa-chevron-left"></i> 梯度下降与脱离鞍点
+              <a href="/2020/04/05/k-medoids聚类/" rel="next" title="k-medoids聚类">
+                <i class="fa fa-chevron-left"></i> k-medoids聚类
               </a>
             
           </div>
@@ -530,10 +533,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/04/12/初识反向传播/" rel="prev" title="初识反向传播">
-                初识反向传播 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -578,8 +577,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -632,6 +640,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入"><span class="nav-number">1.</span> <span class="nav-text">引入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#细节"><span class="nav-number">2.</span> <span class="nav-text">细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关键过程"><span class="nav-number">3.</span> <span class="nav-text">关键过程</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       

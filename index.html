@@ -378,6 +378,164 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/12/初识反向传播/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="X">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="X">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/04/12/初识反向传播/" class="post-title-link" itemprop="url">初识反向传播</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-04-12 00:06:15 / 修改时间：00:06:46" itemprop="dateCreated datePublished" datetime="2020-04-12T00:06:15+08:00">2020-04-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h3><p>在单层感知机模型中，对于输入与输出之间的权重调整依赖于预测产生的误差，由于不含隐藏层，误差可以直接计算得到。而对于多层网络来说，由于隐藏层的存在，输入输出之间的权重变得复杂，显然直接计算并不合理，而是需要通过从输出到输入反方向逐层计算。</p>
+<p>由于是从输出到输入，所以我们一定需要先有一个正向传播的过程。使得样本从输入层开始，由上至下逐层经隐节点计算处理，最终样本信息被传送到输出层节点，得到预测的结果。再根据正向传播得到的结果也就是预测经行误差计算。</p>
+<p>由于有了误差和输出，以及之前传播过来的网络，就有了反向传播的原材料，可以开始进行反向传播了。反向传播无法直接计算隐节点的预测误差，但却可以利用输出节点的预测误差来逐层估计隐节点的误差，也就是将输出节点的预测误差反方向传播到上层隐节点，逐层调整连接权重，直至输入节点和隐节点的权重全部得到调整，使得网络输出值越来越逼近实际值。</p>
+<h3 id="细节"><a href="#细节" class="headerlink" title="细节"></a>细节</h3><p>每个神经元都由两个单元组成。第一个单元的功能是把每个输入信号和对应权重系数($w_{i}$)作乘积然后对这些乘积求和。第二个单元实现了一个非线性函数。这个函数也称为神经元激活函数(neuron activation function)。如下图所示，信号$e$是加法器（即第一个单元）的输出信号，而$y = f(e)$是非线性函数（即第二个单元）的输出信号。显然，$y$也同时是这整个神经元的输出信号。<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMDFiLmdpZg" alt="在这里插入图片描述"><br>一般这个非线性激活函数采用sigmoid函数。节点的输出被限制在0~1的范围内。对于分类问题，输出节点给出的是预测类别的概率值；对于回归问题，输出节点给出的标准化处理后的预测值，只需还原处理即可。<br>使用sigmoid的原因：</p>
+<ul>
+<li>在模型开始训练阶段，由于连接权重的设置要求满足均值为0的均匀分布，所以初期的连接权重在0值附近，使得加法器结果也在0附近。此时sigmoid函数的斜率近似为一个常数，输入输出间呈近似线性关系，模型较为简单；</li>
+<li>随着模型训练的进行，网络权重不断调整，节点加法器的结果逐渐偏离0值，输入输出逐渐呈现出非线性关系，模型逐渐复杂起来，并且输入的变化对输出的影响程度逐渐减小</li>
+<li>到模型训练的后期，节点加法器结果远离0，此时输入的变化将不再引起输出的明显变动，输出基本趋于稳定。神经网络的预测误差不再随着连接权重的调整而得到明显改善，预测结果稳定，模型训练结束。</li>
+</ul>
+<p>可见，sigmoid激活函数较好的体现了连接权重修正过程中，模型从近似线性到非线性的渐进转变过程。</p>
+<p>除此之外，sigmoid激活函数还具有无限次可微的特点，这使得反向传播能够采用梯度下降法来挑战连接权重。</p>
+<h3 id="关键过程"><a href="#关键过程" class="headerlink" title="关键过程"></a>关键过程</h3><p>由于权重的不同，会导致前置神经元对后续紧邻的后置神经元传递的误差不同，或者说对后置神经元的误差贡献度不同，所以在进行反向传播的时候，不能将误差均分到前置 的神经元，而是应该根据权值对误差进行反向的传递。<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMDkuZ2lm" alt="在这里插入图片描述"><br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMTAuZ2lm" alt="在这里插入图片描述"><br>如果前置的神经元对后置多个神经元都传递了误差，那反向传播的时候潜质的误差需要按照权重对后置的误差求和。<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMTEuZ2lm" alt="在这里插入图片描述"><br>当每个神经元的误差信号都已经被计算出来之后，我们就可以开始修改每个神经元输入结点的权重系数了。在下面的公式中，$\frac{\mathrm{df_1(e)} }{\mathrm{d} e}$表示对应的神经元激活函数的导数。<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMTQuZ2lm" alt="在这里插入图片描述"><br><img src="http://galaxy.agh.edu.pl/~vlsi/AI/backp_t_en/backprop_files/img17.gif" alt="
+"><br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2dhbGF4eS5hZ2guZWR1LnBsL352bHNpL0FJL2JhY2twX3RfZW4vYmFja3Byb3BfZmlsZXMvaW1nMTkuZ2lm" alt="在这里插入图片描述"><br><em>计算是逐层的，这里只展示一条链上（$x_1—&gt;f_1{e}—&gt;f_4{e}—&gt;f_5{e}$）的计算，同层计算方式相同不多描述</em><br><em>具体的调整和计算方法涉及到<a href="https://zhuanlan.zhihu.com/p/36564434" target="_blank" rel="noopener">梯度下降算法</a></em><br>系数$\eta$会影响网络的训练速度。有几种技术可以用于选择系数$\eta$。第一种方法是以较大的参数值开始训练过程。在建立权重系数的同时，参数也逐渐减小。第二种方法更复杂，它以较小的参数值开始训练。在训练的过程中，参数增加，然后在最后阶段参数再次减小。以较小的参数值开始训练使得我们可以确定权重参数的符号。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+      <div>
+       
+      </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/05/k-medoids聚类/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2117,194 +2275,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/tensorflow基础/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="X">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="X">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2020/02/03/tensorflow基础/" class="post-title-link" itemprop="url">tensorflow基础</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2020-02-03 12:11:06" itemprop="dateCreated datePublished" datetime="2020-02-03T12:11:06+08:00">2020-02-03</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-02-06 12:11:56" itemprop="dateModified" datetime="2020-02-06T12:11:56+08:00">2020-02-06</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="第一部分：Tensorflow基础"><a href="#第一部分：Tensorflow基础" class="headerlink" title="第一部分：Tensorflow基础"></a>第一部分：Tensorflow基础</h2><h3 id="Tensors张量"><a href="#Tensors张量" class="headerlink" title="Tensors张量"></a>Tensors张量</h3><h4 id="常量constant"><a href="#常量constant" class="headerlink" title="常量constant:"></a>常量constant:</h4><p>‘’’python<br>x = tf.constant([[4,2],[9,5]])<br>print(x)</p>
-<p>tf.Tensor(<br>[[4 2]<br> [9 5]], shape=(2, 2), dtype=int32)<br>‘’’</p>
-<p>可以通过“.numpy()”来得到numpy array类型</p>
-<p>‘’’python<br>x.numpy()</p>
-<p>array([[4, 2],<br>       [9, 5]], dtype=int32)<br>‘’</p>
-<p>像numpy一样，有shape和dtype属性</p>
-<p>‘’’python<br>print(‘shape:’,x.shape)<br>print(‘dx.dtype)</p>
-<p>(2, 2)</p>
-<p><dtype: 'int32'=""><br>‘’’</dtype:></p>
-<p>常用的产生常量的方法是tf.ones和tf.zeros就像numpy的np.ones``np.zeros</p>
-<p>‘’’python<br>print(tf.ones(shape=(2,3)))<br>print(tf.zeros(shape=(3,2)))</p>
-<p>tf.Tensor(<br>[[1. 1. 1.]<br> [1. 1. 1.]], shape=(2, 3), dtype=float32)<br>tf.Tensor(<br>[[0. 0.]<br> [0. 0.]<br> [0. 0.]], shape=(3, 2), dtype=float32)<br>‘’’</p>
-<h3 id="随机数常量random-constant正态分布"><a href="#随机数常量random-constant正态分布" class="headerlink" title="随机数常量random constant正态分布"></a>随机数常量random constant正态分布</h3><p>‘’’python<br>tf.random.normal(shape=(2,2),mean=0,stddev=1.0)</p>
-<tf.tensor: id="12," shape="(2," 2),="" dtype="float32," numpy="array([[-0.05229542," 0.64488363],="" [="" 0.37966082,="" 1.0098479="" ]],="">
-
-<h1 id="整数均匀分布"><a href="#整数均匀分布" class="headerlink" title="整数均匀分布"></a>整数均匀分布</h1><p>tf.random.uniform(shape=(2,2),minval=0,maxval=10,dtype=tf.int32)</p>
-<p><tf.tensor: id="16," shape="(2," 2),="" dtype="int32," numpy="array([[6," 3],="" [8,="" 7]],=""><br>‘’’</tf.tensor:></p>
-<h3 id="Variables变量"><a href="#Variables变量" class="headerlink" title="Variables变量"></a>Variables变量</h3><p>变量是一种特别的张量，用来存储可变数值，需要用一些值来初始化<br>‘’’pyhon<br>initial_value = tf.random.normal(shape=(2,2))<br>a = tf.Variable(initial_value)<br>print(a)</p>
-<p><tf.variable 'variable:0'="" shape="(2," 2)="" dtype="float32," numpy="array([[" 0.07630513,="" -0.39769924],="" [-0.9712114="" ,="" -0.62955064]],=""><br>‘’’</tf.variable></p>
-<p>可以通过assign(value)来赋值“=”，或assign_add(value)“+=”，或assign_sub(value)“-=”<br>‘’’python<br>new_value = tf.random.normal(shape=(2, 2))<br>a.assign(new_value)<br>for i in range(2):<br>    for j in range(2):<br>        assert a[i, j] == new_value[i, j]</p>
-<p>added_value = tf.random.normal(shape=(2,2))<br>a.assign_add(added_value)<br>for i in range(2):<br>    for j in range(2):<br>        assert a[i,j] == new_value[i,j]+added_value[i,j]<br>‘’’</p>
-<h3 id="Tensorflow数学运算"><a href="#Tensorflow数学运算" class="headerlink" title="Tensorflow数学运算"></a>Tensorflow数学运算</h3><p>可以像numpy那样做作运算，Tensorflow的不同时这些运算可以放到GPU或TPU上执行<br>‘’’python<br>a = tf.random.normal(shape=(2,2))<br>b = tf.random.normal(shape=(2,2))<br>c = a+b<br>d = tf.square(c)<br>e = tf.exp(c)<br>print(a)<br>print(b)<br>print(c)<br>print(d)<br>print(e)</p>
-<p>tf.Tensor(<br>[[ 1.6862711 -1.4246397]<br> [-1.0287055 -1.3188182]], shape=(2, 2), dtype=float32)<br>tf.Tensor(<br>[[ 1.4519434  0.7635907]<br> [ 1.1213834 -1.4559215]], shape=(2, 2), dtype=float32)<br>tf.Tensor(<br>[[ 3.1382146  -0.661049  ]<br> [ 0.09267795 -2.7747397 ]], shape=(2, 2), dtype=float32)<br>tf.Tensor(<br>[[9.8483906e+00 4.3698579e-01]<br> [8.5892025e-03 7.6991806e+00]], shape=(2, 2), dtype=float32)<br>tf.Tensor(<br>[[23.062654    0.51630944]<br> [ 1.0971084   0.0623657 ]], shape=(2, 2), dtype=float32)<br>‘’’</p>
-<h2 id="GradientTape计算梯度"><a href="#GradientTape计算梯度" class="headerlink" title="GradientTape计算梯度"></a>GradientTape计算梯度</h2><p>和numpy的另一个不同是，可以自动跟踪任何变量的梯度。<br>打开一个GradientTape,然后通过tape.watch()来跟踪变量<br>‘’’python<br>a = tf.random.normal(shape=(2,2))<br>b = tf.random.normal(shape=(2,2))<br>with tf.GradientTape() as tape:<br>    tape.watch(a)#开始记录所有有关a参与过的运算<br>    c = tf.sqrt(tf.square(a)+tf.square(b)) #变量a做一些运算</p>
-<pre><code>#计算c对于a的梯度
-dc_da = tape.gradient(c,a)
-print(dc_da)
-</code></pre><p>tf.Tensor(<br>[[-0.53557533  0.87920487]<br> [ 0.24663754  0.4680054 ]], shape=(2, 2), dtype=float32)<br>‘’’</p>
-<p>对于所有变量，默认状态下会跟踪计算并用来求梯度，所以不用使用tape.watch()<br>‘’’python<br>a = tf.Variable(a)<br>with tf.GradientTape() as tape:<br>    c = tf.sqrt(tf.square(a)+tf.square(b))<br>    dc_da = tape.gradient(c,a)<br>    print(dc_da)</p>
-<p>tf.Tensor(<br>[[-0.53557533  0.87920487]<br> [ 0.24663754  0.4680054 ]], shape=(2, 2), dtype=float32)<br>‘’’<br>可以通过多开几个GradientTape来求高阶导数：<br>‘’’python<br>with tf.GradientTape() as outer_tape:<br>    with tf.GradientTape() as tape:<br>        c = tf.sqrt(tf.square(a)+tf.square(b))<br>        dc_da = tape.gradient(c,a)<br>    d2c_d2a = outer_tape.gradient(dc_da,a)<br>    print(d2c_d2a)</p>
-<p>tf.Tensor(<br>[[0.54411626 0.33872807]<br> [1.5284648  0.5024241 ]], shape=(2, 2), dtype=float32)<br>‘’’</p>
-</tf.tensor:>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-      <div>
-       
-      </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2354,7 +2324,7 @@ print(dc_da)
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
