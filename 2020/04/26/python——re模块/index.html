@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.6.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="很久没有编写爬虫程序，不过前不久又再次上手。对于文本数据获取指定信息，或者进行清洗，正则表达式都是一个强力的工具。它的使用场景也十分多样。借此回顾总结一下，python中的re模块的主要功能与示例。 compilere.compile()可以对传入的字符串进行编译，来返回一个目标的匹配模式，从而提高正则的效率。主要参数：  pattern : 需要编译的字符串flags : 修改匹配方式，包括以下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python——re模块">
+<meta property="og:url" content="http://yoursite.com/2020/04/26/python——re模块/index.html">
+<meta property="og:site_name" content="X">
+<meta property="og:description" content="很久没有编写爬虫程序，不过前不久又再次上手。对于文本数据获取指定信息，或者进行清洗，正则表达式都是一个强力的工具。它的使用场景也十分多样。借此回顾总结一下，python中的re模块的主要功能与示例。 compilere.compile()可以对传入的字符串进行编译，来返回一个目标的匹配模式，从而提高正则的效率。主要参数：  pattern : 需要编译的字符串flags : 修改匹配方式，包括以下">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200425233415856.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200425234009463.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020042523540991.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020042600143986.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200426001924129.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200426002420879.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020042600375248.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200426003215285.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200426004116940.png">
+<meta property="og:updated_time" content="2020-04-25T16:48:47.530Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python——re模块">
+<meta name="twitter:description" content="很久没有编写爬虫程序，不过前不久又再次上手。对于文本数据获取指定信息，或者进行清洗，正则表达式都是一个强力的工具。它的使用场景也十分多样。借此回顾总结一下，python中的re模块的主要功能与示例。 compilere.compile()可以对传入的字符串进行编译，来返回一个目标的匹配模式，从而提高正则的效率。主要参数：  pattern : 需要编译的字符串flags : 修改匹配方式，包括以下">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200425233415856.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/26/python——re模块/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>python——re模块 | X</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/ZSDDZA" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">X</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">x</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-schedule">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/schedule/" rel="section"><i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>日程表</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/26/python——re模块/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="X">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="X">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python——re模块
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-04-26 00:48:08 / 修改时间：00:48:47" itemprop="dateCreated datePublished" datetime="2020-04-26T00:48:08+08:00">2020-04-26</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>很久没有编写爬虫程序，不过前不久又再次上手。对于文本数据获取指定信息，或者进行清洗，正则表达式都是一个强力的工具。它的使用场景也十分多样。借此回顾总结一下，python中的re模块的主要功能与示例。</p>
+<h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><p>re.compile()可以对传入的字符串进行编译，来返回一个目标的匹配模式，从而提高正则的效率。主要参数：</p>
+<blockquote>
+<p>pattern : 需要编译的字符串<br>flags : 修改匹配方式，包括以下可选：</p>
+<blockquote>
+<p>re.S : 使.匹配包括换行在内的所有字符<br>re.I : 使匹配对大小写不敏感<br>re.U : 根据Unicode规则解析字符，主要用于对中文匹配</p>
+</blockquote>
+</blockquote>
+<p>例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">'正则表达式（英语：Regular Expression，常简写为regex、regexp或RE），又称正则表示式、正则表示法、规则表达式、常规表示法，是计算机科学的一个概念。'</span></span><br><span class="line"><span class="comment">#  获取文本中被中文括号包含的内容</span></span><br><span class="line">pattern = re.compile(<span class="string">'（(.*)）'</span>,flags=re.U)</span><br><span class="line">pattern.findall(text)</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20200425233415856.png" alt="在这里插入图片描述"><br>匹配内容以列表的形式返回<br>看一下flags的作用对比：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">'正则表达式（英语：Regular Expression，常简写为regex、regexp或RE），又称正则表示式、正则表示法、规则表达式、常规表示法，是计算机科学的一个概念。'</span></span><br><span class="line"><span class="comment">#小写英文字母至少出现一次的内容</span></span><br><span class="line">pattern1 = re.compile(<span class="string">'[a-z]+'</span>)</span><br><span class="line"><span class="comment">#无视大小写</span></span><br><span class="line">pattern2 = re.compile(<span class="string">'[a-z]+'</span>,flags=re.I)</span><br><span class="line">print(pattern1.findall(text))</span><br><span class="line">print(pattern2.findall(text))</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20200425234009463.png" alt="在这里插入图片描述"></p>
+<h3 id="match"><a href="#match" class="headerlink" title="match"></a>match</h3><p>re.match()，以定义的正则表达式作为对目标字符串开头的匹配（对非开头部分不匹配）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">'许多程序设计语言都支持利用正则表达式进行字符串操作。'</span></span><br><span class="line">print(re.match(<span class="string">'许多'</span>,text,re.U))</span><br><span class="line">print(re.match(<span class="string">'语言'</span>,text,re.U))</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/2020042523540991.png" alt="在这里插入图片描述"><br>似乎有些鸡肋？其实和re.search()类似，熟悉re模块下的分组对于他们的使用就会有些提升，如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">'许多程序设计语言都支持利用正则表达式进行字符串操作。'</span></span><br><span class="line">print(re.match(<span class="string">'(许多).*(语言)'</span>,text,re.U))</span><br><span class="line">print(re.match(<span class="string">'(许多).*(语言)'</span>,text,re.U).group(<span class="number">0</span>))</span><br><span class="line">print(re.match(<span class="string">'(许多.*)(语言)'</span>,text,re.U).group(<span class="number">1</span>))</span><br><span class="line">print(re.match(<span class="string">'(许多)(.*语言)'</span>,text,re.U).group(<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/2020042600143986.png" alt="在这里插入图片描述"></p>
+<h3 id="search"><a href="#search" class="headerlink" title="search"></a>search</h3><p>re.search()格式类似re.match()，即三个传入参数：pattern，string，flags，但与match匹配开头不同的是，search匹配的是文中出现的第一个满足条件的字符串部分并返回，对后续的不再进行匹配。<br>例子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">'最初的正则表达式出现于理论计算机科学的自动控制理论和形式化语言理论中。'</span></span><br><span class="line">print(re.search(<span class="string">'理论'</span>,text,re.U))</span><br><span class="line">print(re.search(<span class="string">'理论'</span>,text,re.U).group())</span><br><span class="line">print(re.search(<span class="string">'(理论).*(理论)'</span>,text,re.U).group(<span class="number">0</span>))</span><br><span class="line">print(re.search(<span class="string">'(理论.*)(理论)'</span>,text,re.U).group(<span class="number">1</span>))</span><br><span class="line">print(re.search(<span class="string">'(理论)(.*理论)'</span>,text,re.U).group(<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20200426001924129.png" alt="在这里插入图片描述"></p>
+<p>在前面几个例子中使用到的group()方法，是针对match或search成功匹配并返回的对象，称为match object，围绕它的常用方法如下：</p>
+<blockquote>
+<p>　　strat()：返回匹配开始的位置</p>
+<p>　　end()：返回匹配结束的位置</p>
+<p>　　group()：返回被re匹配的字符串</p>
+<p>　　span()：返回一个tuple格式的对象，标记了匹配开始，结束的位置，形如(start,end)</p>
+</blockquote>
+<p>事实上，虽然说search只返回一个对象，但我们可以通过将正则表达式改造成若干子表达式拼接的形式，来返回多个分块的对象。</p>
+<h3 id="findall"><a href="#findall" class="headerlink" title="findall"></a>findall</h3><p>re.findall()会根据传入的正则表达式部分来提取目标字符串中所有符合规则的部分，并传出为列表的形式。<br>例子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">'1940年，沃伦·麦卡洛克与Walter Pitts将神经系统中的神经元描述成小而简单的自动控制元。'</span></span><br><span class="line"></span><br><span class="line">print(re.findall(<span class="string">'..元'</span>,text))</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20200426002420879.png" alt="在这里插入图片描述"><br>与前面在介绍re.compile()时对findall的用法不同，这里是re.findall(正则表达式,目标字符串)的格式，前面的是 编译好的正则模式.findall(目标字符串)，这两种格式的功能等价</p>
+<h3 id="finditer"><a href="#finditer" class="headerlink" title="finditer"></a>finditer</h3><p>我们有时候会遇到这样的情况：目标字符串非常长（可能是一整篇小说），而符合我们正则表达式的目标内容也非常的多，这种时候如果沿用前面的做法使用re.findall()来一口气将所有结果提取出来保存在一个硕大的列表中，是件非常占用内存的事情，而Python中用来节省内存的生成器（generator）就派上了用场；</p>
+<p>re.finditer(pattern,string,flags=0)就利用了这种机制，它构造出一个基于正则表达式pattern和目标字符串string的生成器，使得我们可以在对该生成器的循环中边循环边计算对应位置的值，即从始至终每一轮只保存了当前的位置和当前匹配到的内容，达到节省内存的作用，下面是一个简单的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">'''优美优于丑陋，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">明了优于隐晦；</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">简单优于复杂，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">复杂优于凌乱，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">扁平优于嵌套，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">稀疏优于稠密，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">可读性很重要！'''</span></span><br><span class="line"></span><br><span class="line"><span class="string">'''构造我们的替代规则'''</span></span><br><span class="line">iterator = re.finditer(<span class="string">'(..)优于'</span>,text)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> iterator:</span><br><span class="line">    print(i.group(<span class="number">0</span>))</span><br><span class="line">    print(i.group(<span class="number">1</span>))</span><br><span class="line">    print(i.span())</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/2020042600375248.png" alt="在这里插入图片描述"></p>
+<h3 id="sub"><a href="#sub" class="headerlink" title="sub"></a>sub</h3><p>类似字符串操作中的replace()，只不过replace()中只能死板地设置固定的内容作为替换项，利用re.sub(pattern,repl,string,count)则可以基于正则表达式达到灵活匹配替换内容，pattern指定了正则表达式部分，repl指定了进行替换的新内容，string指定目标字符串，count指定了替换的次数，默认全部替换，其实前一篇文章结尾处我们得到一篇干净的新闻报道就用到了这种方法，下面再举一个简单的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">'''优美优于丑陋，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">明了优于隐晦；</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">简单优于复杂，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">复杂优于凌乱，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">扁平优于嵌套，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">稀疏优于稠密，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">可读性很重要！'''</span></span><br><span class="line"></span><br><span class="line"><span class="string">'''构造我们的替代规则'''</span></span><br><span class="line">print(re.sub(<span class="string">'优于'</span>,<span class="string">'胜过'</span>,text))</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20200426003215285.png" alt="在这里插入图片描述"></p>
+<h3 id="split"><a href="#split" class="headerlink" title="split"></a>split</h3><p>类似于字符串处理中的split()，re.split()在原有基础上扩充了正则表达式的功能，re.split(pattern,string,maxsplit)，其中pattern指定分隔符的正则表达式，string指定目标字符串，maxsplit指定最大分割个数，下面是一个简单的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">'''优美优于丑陋，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">明了优于隐晦，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">简单优于复杂，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">复杂优于凌乱，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">扁平优于嵌套，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">稀疏优于稠密，</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">可读性很重要！'''</span></span><br><span class="line"></span><br><span class="line"><span class="string">'''构造我们的替代规则'''</span></span><br><span class="line">print(re.split(<span class="string">'，\n\n'</span>,text))</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20200426004116940.png" alt="在这里插入图片描述"><br>以上就是关于re模块的常用功能。以后有机会再写一篇结合爬虫来实践以下。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+      <div>
+       
+       <div>
+    
+        <div style="text-align:center;color: black;font-size:24px;">-------------END<i class="fa fa-hand-paper-o" color:black"=""></i>THANKS-------------</div>
+    
+</div>
+
+       
+      </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/12/初识反向传播/" rel="next" title="初识反向传播">
+                <i class="fa fa-chevron-left"></i> 初识反向传播
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="X">
+            
+              <p class="site-author-name" itemprop="name">X</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#compile"><span class="nav-number">1.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#match"><span class="nav-number">2.</span> <span class="nav-text">match</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#search"><span class="nav-number">3.</span> <span class="nav-text">search</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#findall"><span class="nav-number">4.</span> <span class="nav-text">findall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#finditer"><span class="nav-number">5.</span> <span class="nav-text">finditer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sub"><span class="nav-number">6.</span> <span class="nav-text">sub</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#split"><span class="nav-number">7.</span> <span class="nav-text">split</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">X</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+<div class="powered-by">
+  <i class="fa fa-child" font="" style="font-size:26px;"></i>
+  <span id="busuanzi_container_site_uv">
+    本站访客数:<span id="busuanzi_value_site_uv"></span>
+  </span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {equationNumbers: { autoNumber: "AMS" }}
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<style>
+.MathJax_Display {
+  overflow: auto hidden;
+}
+</style>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
