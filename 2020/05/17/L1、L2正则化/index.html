@@ -96,17 +96,22 @@
 
 
 
-  <meta name="description" content="I know it seems like the world is crumbling out there,but it is actually a great time in your life to get a little crazy. Follow your curiosity,and be ambitious about it. Don’t give up your dreams. T">
+  <meta name="description" content="正则化（Regularization）是机器学习中一种常用的技术，其主要目的是控制模型复杂度，减小过拟合。最基本的正则化方法是在原目标（代价）函数 中添加惩罚项，对复杂度高的模型进行“惩罚”。 数学范数是衡量某个向量空间（或矩阵）中的每个向量以长度或大小。范数的一般化定义：对实数p&amp;gt;=1， 范数定义如下：  L1范数 当p=1时，是L1范数，其表示某个向量中所有元素绝对值的和。 L2范数 当">
 <meta property="og:type" content="article">
-<meta property="og:title" content="First post">
-<meta property="og:url" content="http://yoursite.com/2018/12/30/First post/index.html">
+<meta property="og:title" content="L1、L2正则化">
+<meta property="og:url" content="http://yoursite.com/2020/05/17/L1、L2正则化/index.html">
 <meta property="og:site_name" content="X">
-<meta property="og:description" content="I know it seems like the world is crumbling out there,but it is actually a great time in your life to get a little crazy. Follow your curiosity,and be ambitious about it. Don’t give up your dreams. T">
+<meta property="og:description" content="正则化（Regularization）是机器学习中一种常用的技术，其主要目的是控制模型复杂度，减小过拟合。最基本的正则化方法是在原目标（代价）函数 中添加惩罚项，对复杂度高的模型进行“惩罚”。 数学范数是衡量某个向量空间（或矩阵）中的每个向量以长度或大小。范数的一般化定义：对实数p&amp;gt;=1， 范数定义如下：  L1范数 当p=1时，是L1范数，其表示某个向量中所有元素绝对值的和。 L2范数 当">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-07T12:15:47.182Z">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200516234607778.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020051623564131.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200516235708617.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200517000449404.png">
+<meta property="og:updated_time" content="2020-05-16T16:09:53.933Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="First post">
-<meta name="twitter:description" content="I know it seems like the world is crumbling out there,but it is actually a great time in your life to get a little crazy. Follow your curiosity,and be ambitious about it. Don’t give up your dreams. T">
+<meta name="twitter:title" content="L1、L2正则化">
+<meta name="twitter:description" content="正则化（Regularization）是机器学习中一种常用的技术，其主要目的是控制模型复杂度，减小过拟合。最基本的正则化方法是在原目标（代价）函数 中添加惩罚项，对复杂度高的模型进行“惩罚”。 数学范数是衡量某个向量空间（或矩阵）中的每个向量以长度或大小。范数的一般化定义：对实数p&amp;gt;=1， 范数定义如下：  L1范数 当p=1时，是L1范数，其表示某个向量中所有元素绝对值的和。 L2范数 当">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200516234607778.png">
 
 
 
@@ -115,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/12/30/First post/">
+  <link rel="canonical" href="http://yoursite.com/2020/05/17/L1、L2正则化/">
 
 
 
@@ -125,7 +130,7 @@
   };
 </script>
 
-  <title>First post | X</title>
+  <title>L1、L2正则化 | X</title>
   
 
 
@@ -381,7 +386,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/30/First post/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/17/L1、L2正则化/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="X">
@@ -398,7 +403,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">First post
+          <h1 class="post-title" itemprop="name headline">L1、L2正则化
 
               
             
@@ -424,24 +429,12 @@
                 
               
 
-              <time title="创建时间：2018-12-30 13:32:01" itemprop="dateCreated datePublished" datetime="2018-12-30T13:32:01+08:00">2018-12-30</time>
+              <time title="创建时间：2020-05-17 00:09:41 / 修改时间：00:09:53" itemprop="dateCreated datePublished" datetime="2020-05-17T00:09:41+08:00">2020-05-17</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-08-07 20:15:47" itemprop="dateModified" datetime="2019-08-07T20:15:47+08:00">2019-08-07</time>
               
             
           </span>
@@ -474,7 +467,17 @@
       
 
       
-        <p> I know it seems like the world is crumbling out there,but it is actually a great time in your life to get a little crazy. Follow your curiosity,and be ambitious about it. Don’t give up your dreams. The world needs you all!</p>
+        <p>正则化（Regularization）是机器学习中一种常用的技术，其主要目的是控制模型复杂度，减小过拟合。最基本的正则化方法是在原目标（代价）函数 中添加惩罚项，对复杂度高的模型进行“惩罚”。</p>
+<h5 id="数学"><a href="#数学" class="headerlink" title="数学"></a>数学</h5><p>范数是衡量某个向量空间（或矩阵）中的每个向量以长度或大小。范数的一般化定义：对实数p&gt;=1， 范数定义如下：<br><img src="https://img-blog.csdnimg.cn/20200516234607778.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>L1范数 当p=1时，是L1范数，其表示某个向量中所有元素绝对值的和。</li>
+<li>L2范数 当p=2时，是L2范数， 表示某个向量中所有元素平方和再开根， 也就是欧几里得距离公式。</li>
+</ul>
+<h5 id="正则化解决过拟合问题"><a href="#正则化解决过拟合问题" class="headerlink" title="正则化解决过拟合问题"></a>正则化解决过拟合问题</h5><p>正则化通过降低模型的复杂性， 达到避免过拟合的问题。<br>模型过于复杂是因为模型尝试去兼顾各个测试数据点， 导致模型函数如下图，处于一种动荡的状态， 每个点的到时在某些很小的区间里，函数值的变化很剧烈。这就意味着函数在某些小区间里的导数值（绝对值）非常大，由于自变量值可大可小，所以只有系数足够大，才能保证导数值很大。<br><img src="https://img-blog.csdnimg.cn/2020051623564131.png" alt="在这里插入图片描述"><br>而加入正则能抑制系数过大的问题。如下公式， 是岭回归的计算公式。<br><img src="https://img-blog.csdnimg.cn/20200516235708617.png" alt="在这里插入图片描述"><br>如果发生过拟合， 参数θ一般是比较大的值， 加入惩罚项后， 只要控制λ的大小，当λ很大时，θ1到θn就会很小，即达到了约束数量庞大的特征的目的。</p>
+<h5 id="L1和L2正则化的比较"><a href="#L1和L2正则化的比较" class="headerlink" title="L1和L2正则化的比较"></a>L1和L2正则化的比较</h5><p>为了帮助理解，我们来看一个直观的例子：假定x仅有两个属性，于是无论岭回归还是Lasso接触的w都只有两个分量，即w1,w2，我们将其作为两个坐标轴，然后在图中绘制出两个式子的第一项的”等值线”，即在(w1,w2)空间中平方误差项取值相同的点的连线。再分别绘制出L1范数和L2范数的等值线，即在(w1,w2)空间中L1范数取值相同的点的连线，以及L2范数取值相同的点的连线(如下图所示)。<br><img src="https://img-blog.csdnimg.cn/20200517000449404.png" alt="在这里插入图片描述"><br>岭回归与Lasso的解都要在平方误差项与正则化项之间折中，即出现在图中平方误差项等值线与正则化项等值线相交处。而由上图可以看出，采用L1范数时平方误差项等值线与正则化项等值线的交点常出现在坐标轴上，即w1或w2为0，而在采用L2范数时，两者的交点常出现在某个象限中，即w1或w2均非0。</p>
+<p>这说明了岭回归的一个明显缺点：模型的可解释性。它将把不重要的预测因子的系数缩小到趋近于 0，但永不达到 0。也就是说，最终的模型会包含所有的预测因子。但是，在 Lasso 中，如果将调整因子 λ 调整得足够大，L1 范数惩罚可以迫使一些系数估计值完全等于 0。因此，Lasso 可以进行变量选择，产生稀疏模型。注意到w取得稀疏解意味着初始的d个特征中仅有对应着w的非零分量的特征才会出现在最终模型中，于是求解L1范数正则化的结果时得到了仅采用一部分初始特征的模型；换言之，基于L1正则化的学习方法就是一种嵌入式特征选择方法，其特征选择过程和学习器训练过程融为一体，同时完成。</p>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>L1<br>使得模型的解偏向于范数较小的 W，通过限制 W 范数的大小实现了对模型空间的限制，从而在一定程度上避免了 overfitting 。不过 ridge regression 并不具有产生稀疏解的能力，得到的系数仍然需要数据中的所有特征才能计算预测结果，从计算量上来说并没有得到改观。</p>
+<p>L2<br>它的优良性质是能产生稀疏性，导致 W 中许多项变成零。 稀疏的解除了计算量上的好处之外，更重要的是更具有“可解释性”。</p>
 
       
     </div>
@@ -516,15 +519,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2020/05/10/FM算法简述/" rel="next" title="FM算法简述">
+                <i class="fa fa-chevron-left"></i> FM算法简述
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/02/博客创建问题及解决摘要/" rel="prev" title="博客创建问题及解决摘要">
-                博客创建问题及解决摘要 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -569,8 +572,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -623,6 +635,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#数学"><span class="nav-number">1.</span> <span class="nav-text">数学</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#正则化解决过拟合问题"><span class="nav-number">2.</span> <span class="nav-text">正则化解决过拟合问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#L1和L2正则化的比较"><span class="nav-number">3.</span> <span class="nav-text">L1和L2正则化的比较</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
